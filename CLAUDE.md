@@ -2,7 +2,7 @@
 
 Project memory for Claude Code. Read this fully at the start of every session. The rules in **Non-Negotiables** and **What NOT to do** override convenience, speed, and default patterns. When in doubt, choose the more accessible, more private, more conservative option and leave a note.
 
-> Working name: **[PROJECT NAME — TBD]** (candidates: "Access Atlas", "Wayfound", "Verified by Us"). Replace throughout once chosen.
+> **Name: Access Atlas** (chosen 2026-07-07). Earlier candidates: "Wayfound"; "Verified by Us" was rejected because a name asserting "verified" conflicts with the honest-labeling non-negotiable (§2, §4) and raises platform-claim liability (§7).
 
 ---
 
@@ -131,16 +131,28 @@ Nothing here is locked. Optimize the choice for accessibility ceiling, low-bandw
 
 ## 10. Commands
 
-_(Fill in after scaffolding.)_
+```
+npm install          # install deps
+npx playwright install chromium   # one-time, for the a11y tests
 
+npm run dev          # dev server at http://localhost:4321
+npm run build        # build static site to dist/
+npm run preview      # preview the built site
+npm run check        # type-check (astro check) — also the lint step
+npm run lint         # alias for check
+npm run test:a11y    # build + axe-core accessibility tests  <- required in CI
+npm run test         # alias for test:a11y
+
+# Database (optional; needs Docker + Supabase CLI via npx)
+npm run db:start     # local Postgres + migrations + seed
+npm run db:reset     # re-apply migrations and re-seed
+npm run db:stop
 ```
-# install
-# dev
-# build
-# test (unit)
-# test:a11y   <- required in CI
-# lint
-```
+
+Note: there is no separate unit-test suite yet; the validation formula is
+currently exercised through the seed + a11y build. Add unit tests for
+`src/lib/labeling.ts` and the consensus logic when the contributor write flow
+lands.
 
 ---
 
@@ -155,7 +167,7 @@ _(Fill in after scaffolding.)_
 
 ## 12. Glossary
 
-- **Disabled-owned / disabled-led:** business/practice ≥ (threshold TBD, see open decisions) owned or led by a disabled person. **Self-attested — no medical proof, ever.**
+- **Disabled-owned:** a disabled person holds **≥ 51% ownership** of the business/practice. **Disabled-led:** a disabled person holds **primary leadership / decision-making** (a control test, not an ownership percentage). The two are independent and separately attested. **Self-attested — no medical proof, ever** (resolved 2026-07-07).
 - **Disability-literate / disability-competent:** serves disabled people well per the ADHCE competencies. Distinct from disabled-owned; a provider may be either or both.
 - **Self-reported → community-verified:** validation states from §4. Never conflate.
 - **Sourced:** backed by certification/audit/partner — the only state that may carry "high confidence."
@@ -165,13 +177,16 @@ _(Fill in after scaffolding.)_
 
 ## 13. Open decisions (resolve, don't assume)
 
-- Project name.
-- Framework: Next.js vs Astro; custom vs no-code MVP.
-- Ownership % threshold and self-attestation wording for "disabled-owned."
-- Exact consensus count (≥3 is the working floor) and reviewer-weighting formula.
-- Re-verification cadence per attribute type.
-- Whether Places and Providers share one submission flow or two.
-- Entity/hosting for data (ties to the hybrid nonprofit + PBC structure discussed for the org).
+**Resolved (2026-07-07):**
+- ✅ **Project name** → **Access Atlas**.
+- ✅ **Framework** → **Astro + React islands**, **custom build** (not Next.js, not no-code).
+- ✅ **"Disabled-owned" threshold & wording** → self-attested **≥ 51% ownership**; **"disabled-led"** is a separate **control/leadership** attestation. No proof, ever. (§12)
+- ✅ **Re-verification cadence** → **uniform 12 months** (`reverify_interval_days = 365`) for every attribute. Column stays per-attribute so a future tiered policy is a data change, not a migration.
+- ✅ **Submission flow** → **one shared flow** with a Place/Provider toggle and branching provider fields. (Data model is unified; UI not yet built.)
+
+**Still open:**
+- **Exact consensus count & reviewer-weighting formula.** Held at the working floor: ≥3 independent agreeing confirmations, ≥1 carrying the attribute's relevant lived-experience tag, any first-person dissent freezes the claim. Encoded in BOTH `supabase/migrations/0001_init.sql` (the `attribute_claim_status` view) and `src/lib/seed.ts` — **change them together.** Revisit once real contributions exist and the tag-weighting can be tuned against data.
+- **Entity/hosting for data** (ties to the hybrid nonprofit + PBC org structure). This is an org/legal decision, not a code one — defer to a dedicated conversation.
 
 ---
 

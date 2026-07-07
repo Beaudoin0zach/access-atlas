@@ -17,7 +17,7 @@ insert into attribute_definitions (key, label, category, applies_to_kind, questi
   ('accessible_restroom', 'Accessible restroom present', 'facility_objective', null,
    'On your visit, was there a wheelchair-accessible restroom you could use?', true, 365, 'wheelchair_user'),
   ('accessible_parking', 'Accessible parking', 'facility_objective', 'place',
-   'On your visit, was there designated accessible parking that was usable?', true, 730, 'wheelchair_user'),
+   'On your visit, was there designated accessible parking that was usable?', true, 365, 'wheelchair_user'),
   ('height_adjustable_exam_table', 'Height-adjustable exam table', 'facility_objective', 'provider',
    'On your visit, did the provider have a height-adjustable / low-transfer exam table?', true, 365, 'wheelchair_user'),
   ('communicated_directly', 'Communicated directly with me', 'provider_behavior', 'provider',

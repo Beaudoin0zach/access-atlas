@@ -82,14 +82,17 @@ create table listings (
 create index listings_kind_idx on listings (kind);
 create index listings_region_idx on listings (region);
 
--- Provider-only profile. Disabled-owned / disabled-led are SELF-ATTESTED only —
--- never require medical proof (§6, §12). A provider may be literate, owned, both,
--- or neither; these are independent axes (§1).
+-- Provider-only profile. All three flags are SELF-ATTESTED only — never require
+-- medical proof (§6, §12). A provider may be literate, owned, led, any combo, or
+-- none; these are independent axes (§1). Definitions (resolved 2026-07-07, §13):
+--   disabled_owned = a disabled person holds >= 51% ownership.
+--   disabled_led   = a disabled person holds primary leadership / decision-making
+--                    (a control test, NOT an ownership percentage).
 create table provider_profiles (
   listing_id          uuid primary key references listings (id) on delete cascade,
   disability_literate boolean not null default false, -- serves disabled people well (ADHCE, §8)
-  disabled_owned      boolean not null default false, -- self-attested representation (§1)
-  disabled_led        boolean not null default false, -- self-attested representation (§1)
+  disabled_owned      boolean not null default false, -- self-attested >= 51% disabled ownership (§12)
+  disabled_led        boolean not null default false, -- self-attested disabled primary leadership (§12)
   -- ADHCE-mapped affirmation checkboxes captured at sign-up (§8a). Free-form
   -- jsonb so the affirmation set can evolve without a migration.
   self_attestations   jsonb not null default '{}'::jsonb
@@ -112,7 +115,9 @@ create table attribute_definitions (
   question_text        text not null,
   requires_photo       boolean not null default true, -- evidence base (§4, §8b)
   -- Time-decay (§4): physical facts expire. Prompt re-confirmation after this
-  -- many days. Working defaults; per-attribute cadence is an open decision (§13).
+  -- many days. Resolved 2026-07-07 (§13): uniform 12 months (365) for every
+  -- attribute. The column stays per-attribute so a future tiered policy is a
+  -- data change, not a migration.
   reverify_interval_days integer not null default 365,
   -- Whose lived experience is weighted for THIS attribute (§4). e.g. a
   -- 'wheelchair_user' tag is weighted for step-free access. Coarse + optional.

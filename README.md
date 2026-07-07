@@ -1,4 +1,4 @@
-# [PROJECT NAME — TBD]
+# Access Atlas
 
 A disability-focused discovery platform: **accessible places**, **disability-competent / disabled-led providers**, and a **community validation** layer that labels every claim honestly.
 
@@ -62,9 +62,12 @@ To read real data, set `PUBLIC_SUPABASE_URL` and `PUBLIC_SUPABASE_ANON_KEY` in
 
 ## Open decisions that affect this code
 
-See `CLAUDE.md` §13. The ones already touching the schema/UI:
+See `CLAUDE.md` §13. Resolved so far (2026-07-07):
 
-- **Project name** — placeholder `[PROJECT NAME — TBD]` throughout.
-- **Exact consensus count & weighting formula** — the working rule (≥3 agreeing, ≥1 lived-experience-weighted, any dissent freezes) lives in the SQL view *and* `src/lib/seed.ts`. Change both together.
-- **Re-verification cadence per attribute** — `reverify_interval_days` defaults per attribute in the seed; tune per type.
-- **One vs. two submission flows** — the data model is unified regardless.
+- **Project name** → **Access Atlas**.
+- **Framework** → Astro + React islands; **custom build** (not no-code).
+- **"Disabled-owned"** → self-attested ≥51% ownership; **"disabled-led"** is a separate control/leadership attestation. No proof, ever.
+- **Submission flow** → one shared flow with a Place/Provider toggle (not yet built).
+- **Re-verification cadence** → uniform **12 months** for every attribute (`reverify_interval_days = 365`).
+
+Still open (see §13): exact consensus count is held at the ≥3 working floor (the rule — ≥3 agreeing, ≥1 lived-experience-weighted, any dissent freezes — lives in the SQL view *and* `src/lib/seed.ts`; **change both together**); and the data entity/hosting structure, which is an org/legal decision, not a code one.

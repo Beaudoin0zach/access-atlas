@@ -29,8 +29,14 @@ const prov = listing.provider;
         <p>These are <strong>self-attested</strong> by the provider — no medical proof is ever required.</p>
         <ul>
           <li>Disability-literate: {prov.disabilityLiterate ? 'Yes (self-attested)' : 'Not attested'}</li>
-          <li>Disabled-owned: {prov.disabledOwned ? 'Yes (self-attested)' : 'Not attested'}</li>
-          <li>Disabled-led: {prov.disabledLed ? 'Yes (self-attested)' : 'Not attested'}</li>
+          <li>
+            Disabled-owned (a disabled person owns 51% or more):
+            {prov.disabledOwned ? ' Yes (self-attested)' : ' Not attested'}
+          </li>
+          <li>
+            Disabled-led (a disabled person holds primary leadership):
+            {prov.disabledLed ? ' Yes (self-attested)' : ' Not attested'}
+          </li>
         </ul>
       </>
     )

@@ -3,7 +3,7 @@
   "type": "module",
   "version": "0.0.1",
   "private": true,
-  "description": "Disability-focused discovery platform — accessible providers, accessible places, community validation. Working name: [PROJECT NAME — TBD].",
+  "description": "Access Atlas — a disability-focused discovery platform: accessible providers, accessible places, community validation.",
   "engines": {
     "node": ">=20.3.0"
   },
