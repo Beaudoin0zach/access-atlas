@@ -260,6 +260,23 @@ create policy "public read: confirmation aggregates via view only"
 create policy "no public read: contributors"
   on contributors for select using (false);
 
+-- Table-level SELECT for the public roles. RLS (above) decides WHICH rows are
+-- visible, but Postgres checks table-level privilege FIRST — without these grants
+-- every read fails with "permission denied for table". confirmations and
+-- contributors are intentionally omitted (their rows stay private; only the
+-- aggregate view is exposed).
+grant select on listings, provider_profiles, attribute_definitions, attribute_claims
+  to anon, authenticated;
+
+-- The service role is the trusted writer (the contributions/listings endpoints)
+-- until Keycloak-scoped auth lands. Grant it explicit DML on every app table
+-- rather than relying on platform default-privilege behavior, which is not
+-- guaranteed. (SELECT is needed too: INSERT ... RETURNING requires it.)
+grant select, insert, update, delete on
+  listings, provider_profiles, attribute_definitions, attribute_claims,
+  confirmations, contributors
+  to service_role;
+
 -- The status view is deliberately left as a SECURITY DEFINER view (we do NOT
 -- set security_invoker) so it can aggregate confirmations into counts while the
 -- raw confirmation rows remain unreadable (the RLS policies above deny row-level
