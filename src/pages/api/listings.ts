@@ -56,6 +56,9 @@ export const POST: APIRoute = async ({ request, cookies }) => {
         city: str('city', MAX_NAME),
         region: str('region', MAX_NAME),
         postal_code: str('postal_code', 20),
+        // Representation (§12) applies to both kinds — it lives on the listing.
+        disabled_owned: form.get('disabled_owned') != null,
+        disabled_led: form.get('disabled_led') != null,
         submitted_by: contributor.id,
       })
       .select('id')
@@ -63,11 +66,10 @@ export const POST: APIRoute = async ({ request, cookies }) => {
     if (listingErr || !listing) return backToForm(kind, 'error');
 
     if (kind === 'provider') {
+      // provider_profiles carries only provider-specific competence now (§8).
       const { error } = await supabaseAdmin.from('provider_profiles').insert({
         listing_id: listing.id,
         disability_literate: form.get('disability_literate') != null,
-        disabled_owned: form.get('disabled_owned') != null,
-        disabled_led: form.get('disabled_led') != null,
       });
       if (error) return backToForm(kind, 'error');
     }

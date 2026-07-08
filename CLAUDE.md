@@ -187,6 +187,12 @@ verified against real Postgres via `supabase db reset` + the seeded states.
 - ✅ **Submission flow** → **one shared flow** with a Place/Provider toggle and branching provider fields. Built: `src/pages/contribute/submit.astro` + `src/pages/api/listings.ts`. New listings start `self-reported`; the submitter may self-report attributes (creates claims, not confirmations).
 - ✅ **Contributor auth mechanism** → the platform **Keycloak** IdP (pseudonymous), not hand-rolled. Public browsing stays account-free; identity gates contribution only. See §15 and `docs/platform-membership.md`. (The broader pseudonymous-contribution UX design is still open.)
 
+**Resolved (2026-07-08) — schema gaps surfaced by the WNY seed research (`research/seed-nys/gaps.md`):**
+- ✅ **Representation lives on the listing, not the provider.** `disabled_owned` / `disabled_led` were **hoisted from `provider_profiles` onto `listings`** (migration `0004`) so a disabled-owned **place** (e.g. Fly By Cafe) can carry them. `disability_literate` stays provider-only. Orthogonal to the consensus formula. (Gap A)
+- ✅ **`accessible_parking` applies to both kinds** (`applies_to_kind = null`) — §8b treats provider parking as objective too. (Gap B)
+- ✅ **New objective attribute `accessible_scale`** (wheelchair-accessible scale, provider, ADA MDE §8). Zero seed claims by design — a first-person/recruitment target. (Gap C)
+- ⏳ **Deferred:** an `automatic_doors` key (folds into step-free evidence for now) and dental/imaging keys (revisit as a general `patient_transfer_lift` if dental becomes a segment). (Gaps D + dental)
+
 **Still open:**
 - **Exact consensus count & reviewer-weighting formula.** Held at the working floor: ≥3 independent agreeing confirmations, ≥1 carrying the attribute's relevant lived-experience tag, any first-person dissent freezes the claim. Encoded in BOTH `supabase/migrations/0001_init.sql` (the `attribute_claim_status` view) and `src/lib/seed.ts` — **change them together.** Revisit once real contributions exist and the tag-weighting can be tuned against data.
 - **Entity/hosting for data** (ties to the hybrid nonprofit + PBC org structure). This is an org/legal decision, not a code one — defer to a dedicated conversation.

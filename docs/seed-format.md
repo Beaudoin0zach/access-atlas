@@ -31,12 +31,16 @@ is intentional and non-negotiable (§2, §4, §14).
       "postal_code": "14222",
       "lat": 42.92, "lng": -78.87,                         // optional; map is progressive enhancement (§5)
 
-      // Providers only. All three are SELF-ATTESTED, independent axes (§12).
+      // Representation axis (§1, §12), SELF-ATTESTED. TOP-LEVEL because it applies
+      // to BOTH kinds — a disabled-owned cafe is a place. Default false; omit if
+      // not attested. Independent of each other and of disability_literate.
+      "disabled_owned": true,
+      "disabled_led": true,
+
+      // Providers only. Provider-specific competence (§8), SELF-ATTESTED.
       // Omit the whole object for places.
       "provider": {
-        "disability_literate": true,
-        "disabled_owned": false,
-        "disabled_led": true
+        "disability_literate": true
       },
 
       // Self-reported attribute claims. Each becomes ONE attribute_claim in the
@@ -72,11 +76,14 @@ is intentional and non-negotiable (§2, §4, §14).
 - **`source_url`** — required at the listing level; it's what makes the
   "self-reported / community-sourced" disclaimer checkable (§7). Leave nothing
   unsourced; if you can't cite it, omit the attribute rather than guess (§4).
+- **`disabled_owned` / `disabled_led`** — top-level booleans, valid on either
+  kind. Self-attested ownership (≥51%) / leadership per §12.
 - **`attributes[].key`** — the valid keys are whatever lives in
   `attribute_definitions`. Today: `entrance_step_free`, `accessible_restroom`,
-  `accessible_parking` (place), `height_adjustable_exam_table` (provider),
-  `communicated_directly` (provider), `staff_knew_equipment` (provider). The
-  importer validates against the live catalog and lists any unknown keys.
+  `accessible_parking` (both kinds), `height_adjustable_exam_table` (provider),
+  `accessible_scale` (provider), `communicated_directly` (provider),
+  `staff_knew_equipment` (provider). The importer validates against the live
+  catalog and lists any unknown keys.
 - **No personal data.** Never include a reviewer's identity, disability type, or
   anything about a person (§6). This format describes places and providers only.
 

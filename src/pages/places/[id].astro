@@ -36,6 +36,17 @@ const justSubmitted = Astro.url.searchParams.get('submitted') === '1';
       {place && <p class="listing-meta">{place}</p>}
       {listing.summary && <p>{listing.summary}</p>}
 
+      {(listing.disabledOwned || listing.disabledLed) && (
+        <>
+          <h2>Ownership &amp; leadership</h2>
+          <p>Self-attested — no proof required.</p>
+          <ul>
+            {listing.disabledOwned && <li>Disabled-owned (a disabled person owns 51% or more)</li>}
+            {listing.disabledLed && <li>Disabled-led (a disabled person holds primary leadership)</li>}
+          </ul>
+        </>
+      )}
+
       <h2>Accessibility</h2>
       <p>
         Each item below is validated on its own. We never roll accessibility up

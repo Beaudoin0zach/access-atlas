@@ -74,21 +74,25 @@ const noun = kind === 'provider' ? 'provider' : 'place';
       </p>
     </fieldset>
 
+    <fieldset>
+      <legend>Ownership &amp; leadership (self-attested — no proof required)</legend>
+      <p>
+        <input type="checkbox" id="disabled_owned" name="disabled_owned" />
+        <label for="disabled_owned">Disabled-owned — a disabled person owns 51% or more</label>
+      </p>
+      <p>
+        <input type="checkbox" id="disabled_led" name="disabled_led" />
+        <label for="disabled_led">Disabled-led — a disabled person holds primary leadership</label>
+      </p>
+    </fieldset>
+
     {
       kind === 'provider' && (
         <fieldset>
-          <legend>Provider profile (self-attested — no proof required)</legend>
+          <legend>Provider competence (self-attested — no proof required)</legend>
           <p>
             <input type="checkbox" id="disability_literate" name="disability_literate" />
             <label for="disability_literate">Disability-literate — serves disabled people well</label>
-          </p>
-          <p>
-            <input type="checkbox" id="disabled_owned" name="disabled_owned" />
-            <label for="disabled_owned">Disabled-owned — a disabled person owns 51% or more</label>
-          </p>
-          <p>
-            <input type="checkbox" id="disabled_led" name="disabled_led" />
-            <label for="disabled_led">Disabled-led — a disabled person holds primary leadership</label>
           </p>
         </fieldset>
       )

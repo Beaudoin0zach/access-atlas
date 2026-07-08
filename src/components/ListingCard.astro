@@ -18,17 +18,15 @@ const place = [listing.city, listing.region].filter(Boolean).join(', ');
   {listing.summary && <p>{listing.summary}</p>}
 
   {
-    listing.provider && (
+    (listing.disabledOwned || listing.disabledLed || listing.provider?.disabilityLiterate) && (
       <p>
-        {listing.provider.disabilityLiterate && (
+        {/* Provider competence (provider-only) and the representation axis
+            (both kinds) are independent (§1) — shown as distinct tags. */}
+        {listing.provider?.disabilityLiterate && (
           <span class="tag">Disability-literate (self-attested)</span>
         )}
-        {listing.provider.disabledOwned && (
-          <span class="tag">Disabled-owned (self-attested)</span>
-        )}
-        {listing.provider.disabledLed && (
-          <span class="tag">Disabled-led (self-attested)</span>
-        )}
+        {listing.disabledOwned && <span class="tag">Disabled-owned (self-attested)</span>}
+        {listing.disabledLed && <span class="tag">Disabled-led (self-attested)</span>}
       </p>
     )
   }

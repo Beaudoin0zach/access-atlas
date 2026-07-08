@@ -12,6 +12,8 @@
       "city": "Buffalo",
       "region": "Erie County",
       "postal_code": "14222",
+      "disabled_owned": true,
+      "disabled_led": true,
       "attributes": [
         {
           "key": "entrance_step_free",
@@ -35,10 +37,10 @@
       "city": "Buffalo",
       "region": "Erie County",
       "postal_code": "14201",
+      "disabled_owned": false,
+      "disabled_led": true,
       "provider": {
-        "disability_literate": true,
-        "disabled_owned": false,
-        "disabled_led": true
+        "disability_literate": true
       },
       "attributes": [
         {
@@ -46,6 +48,12 @@
           "asserted_value": true,
           "source_url": "https://example.com/placeholder",
           "note": "Placeholder — a real record cites the source (e.g. an MDE compliance listing)"
+        },
+        {
+          "key": "accessible_scale",
+          "asserted_value": true,
+          "source_url": "https://example.com/placeholder",
+          "note": "Placeholder — accessible_scale is a provider MDE attribute (Gap C)"
         }
       ]
     }

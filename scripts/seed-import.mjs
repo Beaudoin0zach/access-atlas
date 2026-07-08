@@ -55,6 +55,9 @@ for (const [i, l] of listings.entries()) {
   else seenRefs.add(l.source_ref);
   if (!l.source_url || typeof l.source_url !== 'string') errors.push(`${at}: missing source_url (provenance is required — §7)`);
   if (l.provider && l.kind !== 'provider') errors.push(`${at}: has a provider block but kind is "${l.kind}"`);
+  for (const f of ['disabled_owned', 'disabled_led']) {
+    if (f in l && typeof l[f] !== 'boolean') errors.push(`${at}: ${f} must be a boolean`);
+  }
   if (l.attributes && !Array.isArray(l.attributes)) errors.push(`${at}: attributes must be an array`);
   for (const [j, a] of (l.attributes ?? []).entries()) {
     if (!a?.key) errors.push(`${at}: attributes[${j}] missing key`);
@@ -132,6 +135,9 @@ for (const l of listings) {
         postal_code: l.postal_code ?? null,
         lat: l.lat ?? null,
         lng: l.lng ?? null,
+        // Representation (§12) is top-level: it applies to places AND providers.
+        disabled_owned: Boolean(l.disabled_owned),
+        disabled_led: Boolean(l.disabled_led),
         source_ref: l.source_ref,
         source_url: l.source_url,
         updated_at: new Date().toISOString(),
@@ -149,13 +155,10 @@ for (const l of listings) {
 
   if (l.kind === 'provider') {
     const p = l.provider ?? {};
+    // provider_profiles holds only provider-specific competence now; ownership /
+    // leadership went to the listing above (both kinds carry them).
     const { error: pErr } = await db.from('provider_profiles').upsert(
-      {
-        listing_id: listing.id,
-        disability_literate: Boolean(p.disability_literate),
-        disabled_owned: Boolean(p.disabled_owned),
-        disabled_led: Boolean(p.disabled_led),
-      },
+      { listing_id: listing.id, disability_literate: Boolean(p.disability_literate) },
       { onConflict: 'listing_id' },
     );
     if (pErr) { console.error(`Failed provider_profile for "${l.name}": ${pErr.message}`); process.exit(1); }

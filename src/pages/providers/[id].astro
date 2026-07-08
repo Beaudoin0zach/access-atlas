@@ -36,23 +36,21 @@ const justSubmitted = Astro.url.searchParams.get('submitted') === '1';
       {place && <p class="listing-meta">{place}</p>}
       {listing.summary && <p>{listing.summary}</p>}
 
-      {prov && (
-        <>
-          <h2>Provider profile</h2>
-          <p>These are <strong>self-attested</strong> by the provider — no medical proof is ever required.</p>
-          <ul>
-            <li>Disability-literate: {prov.disabilityLiterate ? 'Yes (self-attested)' : 'Not attested'}</li>
-            <li>
-              Disabled-owned (a disabled person owns 51% or more):
-              {prov.disabledOwned ? ' Yes (self-attested)' : ' Not attested'}
-            </li>
-            <li>
-              Disabled-led (a disabled person holds primary leadership):
-              {prov.disabledLed ? ' Yes (self-attested)' : ' Not attested'}
-            </li>
-          </ul>
-        </>
-      )}
+      <h2>Ownership, leadership &amp; competence</h2>
+      <p>These are <strong>self-attested</strong> — no medical proof is ever required.</p>
+      <ul>
+        {prov && (
+          <li>Disability-literate: {prov.disabilityLiterate ? 'Yes (self-attested)' : 'Not attested'}</li>
+        )}
+        <li>
+          Disabled-owned (a disabled person owns 51% or more):
+          {listing.disabledOwned ? ' Yes (self-attested)' : ' Not attested'}
+        </li>
+        <li>
+          Disabled-led (a disabled person holds primary leadership):
+          {listing.disabledLed ? ' Yes (self-attested)' : ' Not attested'}
+        </li>
+      </ul>
 
       <h2>Accessibility & competence</h2>
       <p>
