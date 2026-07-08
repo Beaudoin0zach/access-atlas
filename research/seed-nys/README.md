@@ -28,5 +28,19 @@ seed data is a starting point, never a substitute for first-person confirmation.
 
 ## Files
 
-- `EXAMPLE.seed.json` — a **template only** (placeholder entities, fake sources).
-  Shows the shape; do not import it. Real batches replace it.
+**Raw research batch (source of record — the research task's own shape):**
+- `listings.json` / `listings.csv` — 49 candidate WNY records.
+- `attributes.csv` — the attribute claims, flat.
+- `sources-memo.md` — which sources were used and how reliable each is.
+- `gaps.md` — coverage gaps + the schema gaps (A/B/C now resolved) + data-quality flags.
+
+**Import-ready (converted, for review):**
+- `convert.mjs` — deterministic converter (raw batch → importer format), applying the
+  gaps.md §4 data-quality rules. Re-run: `node research/seed-nys/convert.mjs`.
+- `wny-2026-07.seed.json` — the **candidate** import file. 48 listings, 34 self-reported
+  claims. **Not reviewed, not imported.**
+- `CONVERSION-NOTES.md` — every automated decision + the checklist a human must clear
+  before import.
+
+**Template:**
+- `EXAMPLE.seed.json` — placeholder entities/fake sources. Shows the shape; do not import.

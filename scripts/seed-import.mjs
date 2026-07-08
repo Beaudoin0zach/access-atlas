@@ -70,6 +70,11 @@ if (errors.length) {
   process.exit(1);
 }
 
+// Shape is valid — report it BEFORE the DB step so a reviewer with no local
+// backend still gets confirmation (key validation below needs the live catalog).
+const shapeClaimCount = listings.reduce((n, l) => n + (l.attributes?.length ?? 0), 0);
+console.log(`Shape OK: ${listings.length} listing(s), ${shapeClaimCount} attribute claim(s). Checking attribute keys against the live catalog…`);
+
 // ---- validate attribute keys against the LIVE catalog -----------------------
 
 const db = serviceClient();
