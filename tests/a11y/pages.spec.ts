@@ -10,6 +10,7 @@ const ROUTES = [
   '/providers/',
   '/about/privacy/',
   '/about/accessibility/',
+  '/about/help/',
   '/settings/',
   // seeded detail pages (ids from supabase/seed.sql + src/lib/seed.ts)
   '/places/11111111-1111-1111-1111-111111111111/',
@@ -43,7 +44,7 @@ test('home has skip link, one h1, and a main landmark', async ({ page }) => {
 
 // The browsing surface must stay zero-JS even though list/detail pages are now
 // on-demand rendered (low-bandwidth mandate, §5). No <script> on these routes.
-for (const route of ['/', '/places/', '/providers/', '/settings/', '/about/accessibility/', '/places/11111111-1111-1111-1111-111111111111/']) {
+for (const route of ['/', '/places/', '/providers/', '/settings/', '/about/accessibility/', '/about/help/', '/places/11111111-1111-1111-1111-111111111111/']) {
   test(`ships zero <script>: ${route}`, async ({ page }) => {
     await page.goto(route);
     await expect(page.locator('script')).toHaveCount(0);

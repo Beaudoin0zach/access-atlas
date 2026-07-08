@@ -245,7 +245,7 @@ a { color: var(--color-link); text-underline-offset: 0.15em; }
 a:hover { color: var(--color-link-hover); text-decoration: none; }
 
 /* Visible focus for keyboard/switch users (§5). Never remove outlines. */
-:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
   outline: 3px solid var(--color-focus);
   outline-offset: 2px;
   border-radius: 3px;
@@ -522,6 +522,31 @@ form button[type="submit"]:hover { background: var(--brand-strong); transform: t
   cursor: pointer;
 }
 .btn-secondary:hover { background: var(--brand-wash); }
+
+/* -------- Native disclosure (<details>) ---------------------------------
+   Zero-JS collapsible. Used for the help-page FAQ now; the same pattern is
+   ready to drop onto a filter panel when search lands (audit Tier 3) — native
+   <details> gives keyboard operability and aria-expanded for free. */
+details {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  margin: 0.6rem 0;
+  padding: 0 1rem;
+  background: var(--color-surface);
+}
+details[open] { padding-bottom: 0.85rem; }
+summary {
+  cursor: pointer;
+  font-weight: 650;
+  /* Keep the native list-item display so the disclosure triangle stays; the
+     padding alone clears a comfortable ~47px target (WCAG 2.2 §2.5.8). Do NOT
+     set display:flex here — it drops the marker and collapses the summary width. */
+  padding: 0.7rem 0;
+  min-height: 44px;
+}
+summary:hover { color: var(--brand-ink); }
+details > *:not(summary) { margin-top: 0; }
+details p:last-child { margin-bottom: 0; }
 
 /* -------- Callouts ------------------------------------------------------- */
 .disclaimer {
