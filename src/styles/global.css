@@ -523,6 +523,20 @@ form button[type="submit"]:hover { background: var(--brand-strong); transform: t
 }
 .btn-secondary:hover { background: var(--brand-wash); }
 
+/* A submit button that reads as an inline link — used for zero-JS actions that
+   must be a POST (e.g. "Sign out"), where a link would be semantically wrong. */
+.linklike {
+  font: inherit;
+  color: var(--color-link);
+  background: none;
+  border: 0;
+  padding: 0;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+  cursor: pointer;
+}
+.linklike:hover { color: var(--color-link-hover); text-decoration: none; }
+
 /* -------- Native disclosure (<details>) ---------------------------------
    Zero-JS collapsible. Used for the help-page FAQ now; the same pattern is
    ready to drop onto a filter panel when search lands (audit Tier 3) — native

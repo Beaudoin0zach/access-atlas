@@ -40,6 +40,10 @@ Never reference those docs by filesystem path or symlink — always by the URLs 
   static, zero-`<script>` browsing pages in React Native. The platform `ui` runtime is
   for interactive/mobile surfaces; Access Atlas's list-first browsing must not regress
   to a heavier stack (a11y + low-bandwidth are existential here — `CLAUDE.md` §5).
+  **Divergence:** Access Atlas runs a **server-side BFF** for the OIDC flow rather
+  than the client-side `packages/auth` island — tokens stay server-side and the
+  contribute pages stay zero-JS. Rationale in `docs/auth-bff-decision.md` (to be
+  promoted to a BAS ADR).
 
 ## Current status (2026-07-07)
 
@@ -65,9 +69,16 @@ platform IdP is Phase 0 (not stood up). Current state:
 - [x] **CODEOWNERS** (invariant #4) — `.github/CODEOWNERS` guards the write path,
   service-role client, identity seam, security policy, and safety-critical SQL.
   Still needs "Require review from Code Owners" enabled in branch protection.
-- [ ] Register an OIDC client for Access Atlas on Keycloak (when the IdP exists).
-- [ ] Replace the provisional cookie seam with the Keycloak-verified `sub`.
-- [ ] Token-exchange → own Supabase data-access session + step-up for writes.
+- [ ] Register an OIDC client for Access Atlas on Keycloak (when the IdP exists) —
+  see "Register the Keycloak client" below.
+- [x] Replace the provisional cookie seam with the Keycloak-verified `sub` —
+  **code-complete, config-gated** (`src/lib/contributor.ts` `resolveContributor`;
+  the BFF flow in `src/pages/api/auth/*`). Goes live when the three `KEYCLOAK_*`
+  env vars are set; until then, behavior is unchanged.
+- [x] Token-exchange → own Supabase data-access session — **done** as
+  validate-JWKS-then-mint (`src/lib/auth/{verify,session}.ts`); sessions are
+  revocable rows (`contributor_sessions`, migration `0006`). Step-up (ACR) is
+  deferred to Phase B, matching the platform roadmap.
 - [x] **Decoupled deletion / export** (invariant #3 + §6 CCPA/CPRA) — the
   independently-callable, complete workflow exists: `src/lib/data-rights.ts`
   (`exportContributorData` / `deleteContributorData`, storage-aware, idempotent,
@@ -79,6 +90,31 @@ platform IdP is Phase 0 (not stood up). Current state:
     unauthenticated destructive endpoint. The mechanism is ready; only the UI door
     waits on identity.
 - [ ] Adopt shared a11y design tokens where they don't regress the zero-JS browsing surface.
+
+## Register the Keycloak client (when the IdP is stood up)
+
+The app-side integration is drop-in; only these platform-side steps remain. On the
+Keycloak realm, create a client for Access Atlas:
+
+- **Client type:** public (no client secret), **Standard flow** (Authorization
+  Code) with **PKCE (S256)** required.
+- **Valid redirect URI:** `${APP_ORIGIN}/api/auth/callback` (exact).
+- **Valid post-logout redirect URI:** `${APP_ORIGIN}/`.
+- **Subject type:** **pairwise** (per-app `sub`, no cross-app correlation — §6).
+- **Scopes:** `openid` is sufficient (we read `sub`, and `acr` for later step-up).
+
+Then set the three server-only env vars (`.env`, never committed):
+
+```
+KEYCLOAK_ISSUER=https://<host>/realms/<realm>
+KEYCLOAK_CLIENT_ID=<the client id created above>
+KEYCLOAK_REDIRECT_URI=${APP_ORIGIN}/api/auth/callback
+```
+
+Setting all three flips `keycloakConfigured()` true: contribution switches from the
+provisional cookie to real auth, and unauthenticated writes return `need_signin`.
+No code change. Phase B then narrows service-role writes to RLS-scoped sessions,
+adds step-up (ACR), and opens the self-service data-rights door.
 
 ## The five platform invariants (fallback copy — canonical version in governance `INVARIANTS.md`)
 

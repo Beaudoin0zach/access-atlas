@@ -8,10 +8,7 @@
 import type { APIRoute } from 'astro';
 import { supabaseAdmin } from '../../lib/supabase-server';
 import { getAttributeDefinitions } from '../../lib/repo';
-import {
-  getOrCreateContributor,
-  provisionalContributionsAllowed,
-} from '../../lib/contributor';
+import { resolveContributor } from '../../lib/contributor';
 
 export const prerender = false;
 
@@ -32,16 +29,16 @@ export const POST: APIRoute = async ({ request, cookies }) => {
   const kind = kindRaw === 'provider' ? 'provider' : kindRaw === 'place' ? 'place' : null;
   if (!form || !kind) return new Response('Bad request', { status: 400 });
 
-  if (!provisionalContributionsAllowed() || !supabaseAdmin) {
-    return backToForm(kind, 'disabled');
-  }
+  if (!supabaseAdmin) return backToForm(kind, 'disabled');
 
   const name = (form.get('name') as string | null)?.trim();
   if (!name) return backToForm(kind, 'need_name');
 
   try {
     const pseudonym = (form.get('pseudonym') as string | null) ?? null;
-    const contributor = await getOrCreateContributor(cookies, supabaseAdmin, pseudonym);
+    const resolved = await resolveContributor(cookies, supabaseAdmin, { pseudonym });
+    if ('gate' in resolved) return backToForm(kind, resolved.gate);
+    const contributor = resolved.contributor;
 
     const str = (k: string, max: number) =>
       (form.get(k) as string | null)?.trim().slice(0, max) || null;
