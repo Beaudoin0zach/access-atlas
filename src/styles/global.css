@@ -188,9 +188,17 @@ header.site .container {
 header.site a { color: #fff; }
 header.site a:hover { color: #fff; }
 header.site > .container > a:first-child {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
   font-size: 1.2rem;
   letter-spacing: -0.01em;
   text-decoration: none;
+}
+.brand-mark {
+  width: 1.6rem;
+  height: 1.6rem;
+  flex: none;      /* never squish the mark when the header wraps */
 }
 header.site > .container > a strong { font-weight: 700; }
 header.site nav ul {

@@ -26,6 +26,8 @@ const siteName = 'Access Atlas';
       ignore it here and honor it from the middleware header.)
     -->
     <meta http-equiv="Content-Security-Policy" content={CONTENT_SECURITY_POLICY} />
+    <!-- Self-hosted SVG favicon (CSP img-src 'self'); no external request. -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <title>{title} — {siteName}</title>
     {description && <meta name="description" content={description} />}
     <!-- No third-party trackers, ever (§6, §14). No analytics phone-home. -->
@@ -36,7 +38,16 @@ const siteName = 'Access Atlas';
 
     <header class="site">
       <div class="container">
-        <a href="/" aria-label={`${siteName} — home`}><strong>{siteName}</strong></a>
+        <a href="/" aria-label={`${siteName} — home`}>
+          {/* Brand mark — decorative (the wordmark names the site), so hidden
+              from assistive tech. currentColor => white on the teal header. An
+              inclusive compass/atlas motif, NOT the wheelchair symbol (§3). */}
+          <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+            <circle cx="16" cy="16" r="13" fill="none" stroke="currentColor" stroke-opacity="0.5" stroke-width="2" />
+            <path d="M16 4 L18.8 13.2 L28 16 L18.8 18.8 L16 28 L13.2 18.8 L4 16 L13.2 13.2 Z" fill="currentColor" />
+          </svg>
+          <strong>{siteName}</strong>
+        </a>
         <nav aria-label="Primary">
           <ul>
             <li><a href="/places/">Places</a></li>
