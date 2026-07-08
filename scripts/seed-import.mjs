@@ -18,6 +18,14 @@
 import { readFileSync } from 'node:fs';
 import { serviceClient, parseArgs } from './lib/db.mjs';
 
+// Allowed scannability categories — mirror of src/lib/categories.ts. Inlined
+// (not imported) so this script stays pure ESM and runs on the Node 20 floor.
+// Keep in sync with categories.ts (it's a small, stable list).
+const CATEGORIES = [
+  'healthcare', 'disability_services', 'business',
+  'library', 'arts_culture', 'parks_recreation', 'transit',
+];
+
 const args = parseArgs(process.argv.slice(2));
 const file = args._[0];
 const dryRun = Boolean(args['dry-run']);
@@ -58,6 +66,8 @@ for (const [i, l] of listings.entries()) {
   for (const f of ['disabled_owned', 'disabled_led']) {
     if (f in l && typeof l[f] !== 'boolean') errors.push(`${at}: ${f} must be a boolean`);
   }
+  if (l.category != null && !CATEGORIES.includes(l.category))
+    errors.push(`${at}: unknown category "${l.category}" (allowed: ${CATEGORIES.join(', ')})`);
   if (l.attributes && !Array.isArray(l.attributes)) errors.push(`${at}: attributes must be an array`);
   for (const [j, a] of (l.attributes ?? []).entries()) {
     if (!a?.key) errors.push(`${at}: attributes[${j}] missing key`);
@@ -140,6 +150,7 @@ for (const l of listings) {
         postal_code: l.postal_code ?? null,
         lat: l.lat ?? null,
         lng: l.lng ?? null,
+        category: l.category ?? null,
         // Representation (§12) is top-level: it applies to places AND providers.
         disabled_owned: Boolean(l.disabled_owned),
         disabled_led: Boolean(l.disabled_led),

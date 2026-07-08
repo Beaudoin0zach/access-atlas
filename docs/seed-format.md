@@ -78,6 +78,10 @@ is intentional and non-negotiable (§2, §4, §14).
   unsourced; if you can't cite it, omit the attribute rather than guess (§4).
 - **`disabled_owned` / `disabled_led`** — top-level booleans, valid on either
   kind. Self-attested ownership (≥51%) / leadership per §12.
+- **`category`** (optional) — a coarse scannability category (icon + label), one
+  of: `healthcare`, `disability_services`, `business`, `library`, `arts_culture`,
+  `parks_recreation`, `transit`. NULL/omitted = uncategorised. Not part of the
+  validation model (§4). The importer rejects unknown values.
 - **`attributes[].key`** — the valid keys are whatever lives in
   `attribute_definitions`. Today: `entrance_step_free`, `accessible_restroom`,
   `accessible_parking` (both kinds), `height_adjustable_exam_table` (provider),

@@ -75,6 +75,27 @@ const SOURCE_OVERRIDE = {
   'catholic-health-wny': 'https://www.chsbuffalo.org/about-us/compliance-program/language-assistance/',
 };
 
+// Coarse category classifier (mirror of src/lib/categories.ts classifyCategory —
+// inlined so this script stays pure ESM). Name-only, first match wins; null if
+// none. Explicit overrides for names that don't self-describe.
+const CATEGORY_OVERRIDE = {
+  // A Deaf-owned ASL interpreting agency — a disability service; the name alone
+  // ("Service Bridges, Inc.") doesn't reveal it.
+  'service-bridges': 'disability_services',
+};
+function classifyCategory(name) {
+  const t = name.toLowerCase();
+  const has = (...w) => w.some((x) => t.includes(x));
+  if (has('independent living', 'peer connection', 'association on independent', 'interpreting', 'sign language', ' asl', 'visually impaired advancement')) return 'disability_services';
+  if (has('library')) return 'library';
+  if (has('museum', 'theatre', 'theater', 'performing arts', 'science', 'gallery', 'art ')) return 'arts_culture';
+  if (has('park', 'nature preserve', 'creek', 'ridge', 'recreation', 'trail')) return 'parks_recreation';
+  if (has('metro rail', 'station', 'nfta', 'transit', 'bus ')) return 'transit';
+  if (has('health', 'clinic', 'medical', 'dental', 'hospital', 'medicine', 'dentistry', 'care center', 'ecmc', 'physician')) return 'healthcare';
+  if (has('cafe', 'restaurant', 'coffee', 'shop', 'store', 'llc', 'inc', 'company', 'contracting')) return 'business';
+  return null;
+}
+
 const src = JSON.parse(readFileSync(SRC, 'utf8'));
 const records = Array.isArray(src) ? src : src.listings;
 
@@ -118,6 +139,7 @@ for (const r of records) {
     postal_code: r.postal_code ?? null,
     lat: r.lat ?? null,
     lng: r.lng ?? null,
+    category: CATEGORY_OVERRIDE[id] ?? classifyCategory(r.name),
     // The research batch stored ownership inconsistently: top-level for places,
     // but inside provider_profile for providers. Read BOTH so the representation
     // axis (§1) isn't silently lost for the SDVOB / disabled-led provider records.

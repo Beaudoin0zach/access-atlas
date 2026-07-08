@@ -33,13 +33,13 @@ insert into attribute_definitions (key, label, category, applies_to_kind, questi
 
 -- Listings — a handful in Erie County (§3). disabled_owned / disabled_led live
 -- here now (both kinds, §12); disability_literate stays on provider_profiles.
-insert into listings (id, kind, name, summary, city, region, postal_code, disabled_owned, disabled_led) values
+insert into listings (id, kind, name, summary, city, region, postal_code, category, disabled_owned, disabled_led) values
   ('11111111-1111-1111-1111-111111111111', 'place', 'Elmwood Village Cafe',
-   'Neighborhood cafe on Elmwood Ave.', 'Buffalo', 'Erie County', '14222', false, false),
+   'Neighborhood cafe on Elmwood Ave.', 'Buffalo', 'Erie County', '14222', 'business', false, false),
   ('22222222-2222-2222-2222-222222222222', 'place', 'Central Library — Downtown',
-   'Public library, main branch.', 'Buffalo', 'Erie County', '14203', false, false),
+   'Public library, main branch.', 'Buffalo', 'Erie County', '14203', 'library', false, false),
   ('33333333-3333-3333-3333-333333333333', 'provider', 'Lakeshore Family Medicine',
-   'Primary care practice.', 'Buffalo', 'Erie County', '14201', false, true);
+   'Primary care practice.', 'Buffalo', 'Erie County', '14201', 'healthcare', false, true);
 
 insert into provider_profiles (listing_id, disability_literate) values
   ('33333333-3333-3333-3333-333333333333', true);

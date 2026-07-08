@@ -276,6 +276,18 @@ strong { font-weight: 650; }
   transform: translateY(-2px);
   border-color: color-mix(in srgb, var(--brand) 35%, var(--color-border));
 }
+/* Category chip: an icon + its text label (never icon alone, §5). */
+.category-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0 0 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 650;
+  color: var(--brand-ink);
+}
+.cat-icon { width: 1.05rem; height: 1.05rem; flex: none; }
+
 .listing-card h3 { margin: 0 0 0.2rem; font-size: 1.2rem; letter-spacing: -0.01em; }
 .listing-card h3 a { text-decoration: none; }
 .listing-card h3 a:hover { text-decoration: underline; }

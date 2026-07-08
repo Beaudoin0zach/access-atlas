@@ -5,6 +5,8 @@ export const prerender = false;
 
 import Base from '../../layouts/Base.astro';
 import AttributeList from '../../components/AttributeList.astro';
+import CategoryIcon from '../../components/CategoryIcon.astro';
+import { categoryLabel, isCategory } from '../../lib/categories';
 import { getListing, getStatusesForListing } from '../../lib/repo';
 
 const { id } = Astro.params;
@@ -33,6 +35,12 @@ const justSubmitted = Astro.url.searchParams.get('submitted') === '1';
       )}
       <p><a href="/providers/">← All providers</a></p>
       <h1>{listing.name}</h1>
+      {isCategory(listing.category) && (
+        <p class="category-tag">
+          <CategoryIcon category={listing.category} />
+          <span>{categoryLabel(listing.category)}</span>
+        </p>
+      )}
       {place && <p class="listing-meta">{place}</p>}
       {listing.summary && <p>{listing.summary}</p>}
 

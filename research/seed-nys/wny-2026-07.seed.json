@@ -14,6 +14,7 @@
       "postal_code": "14214",
       "lat": null,
       "lng": null,
+      "category": "disability_services",
       "disabled_owned": false,
       "disabled_led": true,
       "_review": {
@@ -37,6 +38,7 @@
       "postal_code": "14301",
       "lat": null,
       "lng": null,
+      "category": "disability_services",
       "disabled_owned": false,
       "disabled_led": true,
       "_review": {
@@ -62,6 +64,7 @@
       "postal_code": "14020",
       "lat": null,
       "lng": null,
+      "category": "disability_services",
       "disabled_owned": false,
       "disabled_led": true,
       "_review": {
@@ -87,6 +90,7 @@
       "postal_code": "14214",
       "lat": null,
       "lng": null,
+      "category": "disability_services",
       "disabled_owned": false,
       "disabled_led": true,
       "_review": {
@@ -110,6 +114,7 @@
       "postal_code": "14701",
       "lat": null,
       "lng": null,
+      "category": "disability_services",
       "disabled_owned": false,
       "disabled_led": true,
       "_review": {
@@ -135,6 +140,7 @@
       "postal_code": "14760",
       "lat": null,
       "lng": null,
+      "category": "disability_services",
       "disabled_owned": false,
       "disabled_led": true,
       "_review": {
@@ -160,6 +166,7 @@
       "postal_code": "12210",
       "lat": null,
       "lng": null,
+      "category": "disability_services",
       "disabled_owned": false,
       "disabled_led": true,
       "_review": {
@@ -186,6 +193,7 @@
       "postal_code": "14207",
       "lat": null,
       "lng": null,
+      "category": "healthcare",
       "disabled_owned": false,
       "disabled_led": false,
       "_review": {
@@ -219,6 +227,7 @@
       "postal_code": "14207",
       "lat": null,
       "lng": null,
+      "category": "healthcare",
       "disabled_owned": false,
       "disabled_led": false,
       "_review": {
@@ -242,6 +251,7 @@
       "postal_code": "14211",
       "lat": null,
       "lng": null,
+      "category": "healthcare",
       "disabled_owned": false,
       "disabled_led": false,
       "_review": {
@@ -287,6 +297,7 @@
       "postal_code": "14207",
       "lat": null,
       "lng": null,
+      "category": "healthcare",
       "disabled_owned": false,
       "disabled_led": false,
       "_review": {
@@ -320,6 +331,7 @@
       "postal_code": "14219",
       "lat": null,
       "lng": null,
+      "category": "healthcare",
       "disabled_owned": false,
       "disabled_led": false,
       "_review": {
@@ -353,6 +365,7 @@
       "postal_code": "14225",
       "lat": null,
       "lng": null,
+      "category": "healthcare",
       "disabled_owned": false,
       "disabled_led": false,
       "_review": {
@@ -385,6 +398,7 @@
       "postal_code": "14201",
       "lat": null,
       "lng": null,
+      "category": "healthcare",
       "disabled_owned": false,
       "disabled_led": false,
       "_review": {
@@ -410,6 +424,7 @@
       "postal_code": "14209",
       "lat": null,
       "lng": null,
+      "category": "disability_services",
       "disabled_owned": false,
       "disabled_led": false,
       "_review": {
@@ -442,6 +457,7 @@
       "postal_code": "14215",
       "lat": null,
       "lng": null,
+      "category": "healthcare",
       "disabled_owned": false,
       "disabled_led": false,
       "_review": {
@@ -467,6 +483,7 @@
       "postal_code": "14020",
       "lat": null,
       "lng": null,
+      "category": "healthcare",
       "disabled_owned": false,
       "disabled_led": false,
       "_review": {
@@ -493,6 +510,7 @@
       "postal_code": "14203",
       "lat": null,
       "lng": null,
+      "category": "healthcare",
       "disabled_owned": false,
       "disabled_led": false,
       "_review": {
@@ -519,6 +537,7 @@
       "postal_code": "14202",
       "lat": null,
       "lng": null,
+      "category": "disability_services",
       "disabled_owned": true,
       "disabled_led": true,
       "_review": {
@@ -544,6 +563,7 @@
       "postal_code": "14222",
       "lat": null,
       "lng": null,
+      "category": "arts_culture",
       "disabled_owned": false,
       "disabled_led": false,
       "_review": {
@@ -583,6 +603,7 @@
       "postal_code": "14216",
       "lat": null,
       "lng": null,
+      "category": "arts_culture",
       "disabled_owned": false,
       "disabled_led": false,
       "_review": {
@@ -622,6 +643,7 @@
       "postal_code": "14211",
       "lat": null,
       "lng": null,
+      "category": "arts_culture",
       "disabled_owned": false,
       "disabled_led": false,
       "_review": {
@@ -649,6 +671,7 @@
       "postal_code": "14202",
       "lat": null,
       "lng": null,
+      "category": "arts_culture",
       "disabled_owned": false,
       "disabled_led": false,
       "_review": {
@@ -671,6 +694,7 @@
       "postal_code": "14202",
       "lat": null,
       "lng": null,
+      "category": "arts_culture",
       "disabled_owned": false,
       "disabled_led": false,
       "_review": {
@@ -693,6 +717,7 @@
       "postal_code": "14203",
       "lat": null,
       "lng": null,
+      "category": "library",
       "disabled_owned": false,
       "disabled_led": false,
       "_review": {
@@ -728,6 +753,7 @@
       "postal_code": "14208",
       "lat": null,
       "lng": null,
+      "category": "library",
       "disabled_owned": false,
       "disabled_led": false,
       "_review": {
@@ -757,6 +783,7 @@
       "postal_code": "14220",
       "lat": null,
       "lng": null,
+      "category": "library",
       "disabled_owned": false,
       "disabled_led": false,
       "_review": {
@@ -786,6 +813,7 @@
       "postal_code": "14215",
       "lat": null,
       "lng": null,
+      "category": "library",
       "disabled_owned": false,
       "disabled_led": false,
       "_review": {
@@ -815,6 +843,7 @@
       "postal_code": "14206",
       "lat": null,
       "lng": null,
+      "category": "library",
       "disabled_owned": false,
       "disabled_led": false,
       "_review": {
@@ -844,6 +873,7 @@
       "postal_code": "14223",
       "lat": null,
       "lng": null,
+      "category": "library",
       "disabled_owned": false,
       "disabled_led": false,
       "_review": {
@@ -873,6 +903,7 @@
       "postal_code": "14221",
       "lat": null,
       "lng": null,
+      "category": "library",
       "disabled_owned": false,
       "disabled_led": false,
       "_review": {
@@ -908,6 +939,7 @@
       "postal_code": "14221",
       "lat": null,
       "lng": null,
+      "category": "library",
       "disabled_owned": false,
       "disabled_led": false,
       "_review": {
@@ -941,6 +973,7 @@
       "postal_code": "14228",
       "lat": null,
       "lng": null,
+      "category": "library",
       "disabled_owned": false,
       "disabled_led": false,
       "_review": {
@@ -970,6 +1003,7 @@
       "postal_code": "14214",
       "lat": null,
       "lng": null,
+      "category": "transit",
       "disabled_owned": false,
       "disabled_led": false,
       "_review": {
@@ -999,6 +1033,7 @@
       "postal_code": "14202",
       "lat": null,
       "lng": null,
+      "category": "transit",
       "disabled_owned": false,
       "disabled_led": false,
       "_review": {
@@ -1028,6 +1063,7 @@
       "postal_code": "14202",
       "lat": null,
       "lng": null,
+      "category": "transit",
       "disabled_owned": false,
       "disabled_led": false,
       "_review": {
@@ -1057,6 +1093,7 @@
       "postal_code": "14203",
       "lat": null,
       "lng": null,
+      "category": "transit",
       "disabled_owned": false,
       "disabled_led": false,
       "_review": {
@@ -1080,6 +1117,7 @@
       "postal_code": "14203",
       "lat": null,
       "lng": null,
+      "category": "parks_recreation",
       "disabled_owned": false,
       "disabled_led": false,
       "_review": {
@@ -1102,6 +1140,7 @@
       "postal_code": "14127",
       "lat": null,
       "lng": null,
+      "category": "parks_recreation",
       "disabled_owned": false,
       "disabled_led": false,
       "_review": {
@@ -1135,6 +1174,7 @@
       "postal_code": "14150",
       "lat": null,
       "lng": null,
+      "category": "parks_recreation",
       "disabled_owned": false,
       "disabled_led": false,
       "_review": {
@@ -1164,6 +1204,7 @@
       "postal_code": "14139",
       "lat": null,
       "lng": null,
+      "category": "parks_recreation",
       "disabled_owned": false,
       "disabled_led": false,
       "_review": {
@@ -1186,6 +1227,7 @@
       "postal_code": "14304",
       "lat": null,
       "lng": null,
+      "category": "business",
       "disabled_owned": true,
       "disabled_led": true,
       "_review": {
