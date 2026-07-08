@@ -18,10 +18,12 @@ const gateReason = contributionGateReason();
 
 const BANNERS: Record<string, { role: 'status' | 'alert'; text: string }> = {
   disabled: { role: 'status', text: 'Contributions are not open yet — the community sign-in is still being set up. Your listing was not saved.' },
-  need_name: { role: 'alert', text: 'Please give the place or provider a name.' },
   error: { role: 'alert', text: 'Something went wrong and your listing was not saved. Please try again.' },
 };
 const banner = status ? BANNERS[status] : null;
+// A missing name is shown INLINE on the field (aria-invalid + aria-describedby),
+// not just as a top banner — the error sits where the fix is made (§5).
+const nameError = status === 'need_name';
 const noun = kind === 'provider' ? 'provider' : 'place';
 ---
 
@@ -46,8 +48,19 @@ const noun = kind === 'provider' ? 'provider' : 'place';
     <input type="hidden" name="kind" value={kind} />
 
     <p>
-      <label for="name">Name (required)</label><br />
-      <input type="text" id="name" name="name" required maxlength="200" />
+      <label for="name">Name <span class="req" aria-hidden="true">*</span><span class="sr-only"> (required)</span></label><br />
+      <input
+        type="text"
+        id="name"
+        name="name"
+        required
+        aria-required="true"
+        maxlength="200"
+        aria-invalid={nameError ? 'true' : undefined}
+        aria-describedby={nameError ? 'name-error' : undefined}
+        autofocus={nameError}
+      />
+      {nameError && <span class="field-error" id="name-error">Please give the place or provider a name.</span>}
     </p>
     <p>
       <label for="summary">Short description (optional)</label><br />

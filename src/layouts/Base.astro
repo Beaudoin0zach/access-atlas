@@ -3,6 +3,7 @@
 // lang attribute, and a sensible <title> — the floor every page stands on (§5).
 import '../styles/global.css';
 import { CONTENT_SECURITY_POLICY } from '../lib/security';
+import { SETTINGS_COOKIE, parseSettings, settingsToRootAttrs } from '../lib/settings';
 
 interface Props {
   title: string;
@@ -10,10 +11,17 @@ interface Props {
 }
 const { title, description } = Astro.props;
 const siteName = 'Access Atlas';
+
+// Apply the visitor's saved accessibility settings SERVER-SIDE (§5). The browsing
+// pages are on-demand, so this reads the functional cookie on every request and
+// stamps the class + CSS vars onto <html> below — zero client JS. On a
+// prerendered page (build time) there is no request cookie, so this is just the
+// defaults; that's why the pages that should honor settings set prerender=false.
+const rootAttrs = settingsToRootAttrs(parseSettings(Astro.cookies.get(SETTINGS_COOKIE)?.value));
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" class={rootAttrs.class || undefined} style={rootAttrs.style}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -53,6 +61,7 @@ const siteName = 'Access Atlas';
             <li><a href="/places/">Places</a></li>
             <li><a href="/providers/">Providers</a></li>
             <li><a href="/contribute/submit/">Suggest a listing</a></li>
+            <li><a href="/settings/">Accessibility</a></li>
             <li><a href="/about/privacy/">Privacy</a></li>
           </ul>
         </nav>
@@ -69,6 +78,10 @@ const siteName = 'Access Atlas';
           Accessibility tools built <em>with</em> the community, not sold
           <em>to</em> it. Listings are self-reported and community-sourced —
           see <a href="/about/privacy/">how we label trust</a>.
+        </p>
+        <p class="footer-links">
+          <a href="/settings/">Accessibility settings</a> ·
+          <a href="/about/accessibility/">Accessibility statement</a>
         </p>
       </div>
     </footer>

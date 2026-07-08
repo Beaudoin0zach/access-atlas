@@ -12,6 +12,7 @@
 
 :root {
   --font-scale: 1;            /* user-adjustable text size (§5) */
+  --line-scale: 1;            /* user-adjustable line spacing (§5) */
 
   /* Warm, calm neutrals + a trustworthy teal brand. All text pairings below
      meet or exceed WCAG 2.2 AA (4.5:1 body / 3:1 large + UI). */
@@ -121,7 +122,8 @@ body {
   background: var(--color-bg);
   color: var(--color-fg);
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  line-height: 1.6;
+  /* Base 1.6, scaled by the user's line-spacing setting (§5). */
+  line-height: calc(1.6 * var(--line-scale, 1));
   /* Kinder rendering of the system font at large sizes. */
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -135,6 +137,99 @@ body {
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
   }
+}
+/* The manual "Reduce motion" setting forces the same, regardless of OS pref
+   (§5: the user can choose even when their OS doesn't). Separate rule — a
+   selector and an @media block can't be comma-joined. */
+:root.reduce-motion *,
+:root.reduce-motion *::before,
+:root.reduce-motion *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+  scroll-behavior: auto !important;
+}
+
+/* Visually-hidden but available to assistive tech (§5). The standard clip
+   pattern — for screen-reader-only context, never to hide real content. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---- User setting: font choice ------------------------------------------
+   Two non-default options (§5 user-customizable, §4 honest labels).
+
+   "readable" — a wide, high-legibility SYSTEM stack + spacing. No network
+   request, works offline; the zero-cost choice for low-bandwidth users. */
+:root.readable-font body {
+  font-family: Verdana, Tahoma, "Segoe UI", system-ui, sans-serif;
+  letter-spacing: 0.02em;
+  word-spacing: 0.08em;
+}
+
+/* "dyslexic" — self-hosted OpenDyslexic (SIL OFL; files + licence in
+   public/fonts/). Self-hosted so it satisfies the CSP `font-src 'self'` (audit
+   §D). CRUCIALLY, the @font-face below is INERT until .dyslexic-font is on
+   <html>: browsers don't fetch a webfont until a rendered glyph uses its
+   family, so only visitors who choose this pay the ~115KB — everyone else
+   downloads nothing (§5 low-bandwidth stays intact). swap => text shows
+   immediately in the fallback, then re-renders when the font arrives. */
+@font-face {
+  font-family: "OpenDyslexic";
+  src: url("/fonts/opendyslexic-400.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "OpenDyslexic";
+  src: url("/fonts/opendyslexic-700.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+:root.dyslexic-font body {
+  font-family: "OpenDyslexic", Verdana, Tahoma, system-ui, sans-serif;
+  letter-spacing: 0.02em;
+  word-spacing: 0.08em;
+}
+
+/* ---- Target size (WCAG 2.2 §2.5.8, AA) ----------------------------------
+   Baseline: give the small UI controls a >=24px hit area. Inline links inside
+   running prose are exempt, so we scope to the nav and to standalone action
+   links — not to every <a>. */
+header.site nav a,
+.report-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+}
+
+/* User setting: larger targets bumps the standalone controls to >=44px and
+   enlarges form controls — comfortable for tremor, low-vision, and touch (§5). */
+:root.large-targets header.site nav a,
+:root.large-targets .report-link,
+:root.large-targets .btn,
+:root.large-targets button[type="submit"],
+:root.large-targets .btn-secondary {
+  min-height: 44px;
+}
+:root.large-targets input[type="checkbox"] {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+:root.large-targets select,
+:root.large-targets input[type="text"],
+:root.large-targets input[type="date"] {
+  min-height: 44px;
 }
 
 main { display: block; }
@@ -363,6 +458,7 @@ form label { font-weight: 500; }
 form p label { display: inline-block; }
 form input[type="text"],
 form input[type="date"],
+form select,
 form textarea {
   font: inherit;
   padding: 0.5rem 0.6rem;
@@ -375,7 +471,25 @@ form textarea {
 }
 form input[type="text"]:focus,
 form input[type="date"]:focus,
+form select:focus,
 form textarea:focus { border-color: var(--brand); }
+
+/* A quiet inline explanation next to a checkbox/label (settings page). */
+.field-hint { color: var(--color-muted); font-weight: 400; }
+
+/* Inline, field-level error text (§5: text-based errors, not colour alone —
+   the leading "!" mark carries the meaning without relying on the red). */
+.field-error {
+  display: block;
+  margin-top: 0.25rem;
+  color: var(--tone-disputed);
+  font-weight: 650;
+  font-size: 0.95rem;
+}
+.field-error::before { content: "! "; }
+/* A required-field marker on a label; the word "required" is read out via an
+   adjacent .sr-only, so the asterisk itself is decorative to assistive tech. */
+.req { color: var(--tone-disputed); font-weight: 700; margin-left: 0.15rem; }
 form textarea { width: 100%; }
 form input[type="checkbox"] { width: 1.1rem; height: 1.1rem; accent-color: var(--brand); vertical-align: -0.15rem; margin-right: 0.35rem; }
 form button[type="submit"] {
@@ -390,6 +504,21 @@ form button[type="submit"] {
   transition: background 0.12s ease, transform 0.12s ease;
 }
 form button[type="submit"]:hover { background: var(--brand-strong); transform: translateY(-1px); }
+
+/* Secondary action (e.g. "Reset to defaults") — outline, not filled, so it
+   reads as the quieter of two buttons. */
+.settings-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; }
+.btn-secondary {
+  font: inherit;
+  font-weight: 650;
+  padding: 0.6rem 1.3rem;
+  border: 2px solid var(--brand);
+  background: var(--color-surface);
+  color: var(--brand-ink);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+}
+.btn-secondary:hover { background: var(--brand-wash); }
 
 /* -------- Callouts ------------------------------------------------------- */
 .disclaimer {
@@ -418,3 +547,4 @@ footer.site {
   background: var(--color-surface);
   font-size: 0.95rem;
 }
+footer.site .footer-links { margin-bottom: 0; }

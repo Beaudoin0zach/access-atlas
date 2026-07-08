@@ -1,4 +1,10 @@
 ---
+// On-demand so the visitor's saved accessibility settings (the aa_settings
+// cookie, read in Base.astro) apply here too — otherwise "large text" would take
+// hold on /places but not on the home page, which reads as broken. Still zero-JS:
+// server-rendered HTML, no client scripts.
+export const prerender = false;
+
 import Base from '../layouts/Base.astro';
 import { isDbConfigured } from '../lib/supabase';
 ---
