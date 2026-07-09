@@ -1163,7 +1163,14 @@
         ],
         "source_notes": "First-party dedicated accessibility page (fetched 2026-07-09); high reliability. Exact wording: 'The majority of the Martin House 75-minute tour is wheelchair accessible, with the exception of the pergola'; per FAQs, also excepting the 2nd floor ('Walkers are not allowed on the 2nd floor of the Martin House'). 'Our Greatbatch Pavilion Visitor Center and Museum Store are accessible, as are many of the outdoor areas.' The Martin House Plus tour is explicitly NOT wheelchair accessible; Barton House and Gardener's Cottage are NOT wheelchair accessible (per martinhouse.org rental/FAQ pages). Page warns of 'a considerable amount of walking, standing, and stair-climbing' on most tours with 'very few places to sit down.' No explicit statement on step-free entrance or accessible restrooms — not asserted. Only ONE accessible parking spot — capacity caveat."
       },
-      "attributes": []
+      "attributes": [
+        {
+          "key": "accessible_parking",
+          "asserted_value": true,
+          "source_url": "https://martinhouse.org/visit/prepare/accessibility/",
+          "note": "Source states: 'There is a handicapped parking spot behind the Greatbatch Pavilion' (a single spot; call (716) 856-3858 in advance about availability)."
+        }
+      ]
     },
     {
       "source_ref": "wny:place:keybank-center",

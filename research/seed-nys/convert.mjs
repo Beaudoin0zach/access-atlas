@@ -84,12 +84,16 @@ const DROP_ATTRS = new Set([
 // restroom/parking claims despite the partial-access caution flags (the caution
 // stays on the record — it describes balconies/historic interiors, not these
 // claims). Claims stay `self_reported`; a visit only becomes a confirmation
-// through the contribute flow (§4). Martin House was NOT restored.
+// through the contribute flow (§4).
 const KEEP_ATTRS_DESPITE_CAUTION = new Set([
   'kleinhans-music-hall',
   'buffalo-erie-county-botanical-gardens',
   'flw-graycliff',
   'theatre-of-youth-allendale',
+  // 2026-07-09 (second pass): reviewer chose to include Martin House's parking
+  // claim too — first-party-sourced, single-spot caveat kept in the claim note;
+  // the community-validation bar (≥3 first-person confirmations) applies as always.
+  'flw-martin-house',
 ]);
 const PROMOTE_PARKING = 'provider_parking_evidence_no_schema_slot';
 // Source upgrades (reviewer 2026-07-08): replace a weak/transient source with a
@@ -187,7 +191,7 @@ for (const r of records) {
     ? []
     : flags.filter((f) => DROP_ATTRS.has(f));
   if (KEEP_ATTRS_DESPITE_CAUTION.has(id) && flags.some((f) => DROP_ATTRS.has(f))) {
-    log.push(`KEEP ${r.attributes?.length ?? 0} attr claim(s) despite caution flags — reviewer visited & signed off 2026-07-09: ${tag}`);
+    log.push(`KEEP ${r.attributes?.length ?? 0} attr claim(s) despite caution flags — reviewer sign-off 2026-07-09 (basis per record in convert.mjs): ${tag}`);
   }
   if (DROP_ATTRS_FOR_CANDIDATE.has(id) && (r.attributes || []).length) {
     log.push(`DROP ${r.attributes.length} attr claim(s) — source unverifiable from here (403): ${tag}`);

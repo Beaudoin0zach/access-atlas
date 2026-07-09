@@ -14,7 +14,8 @@ npm run seed:import -- research/seed-nys/wny-2026-07b.seed.json --dry-run
 
 ## Result (after the 2026-07-09 partial review pass)
 
-- **66** listings (2 dropped), **34** self-reported attribute claims (1 safety-dropped).
+- **66** listings (2 dropped), **35** self-reported attribute claims (0 safety-dropped
+  after the reviewer pass — all 7 restored across two decisions, see below).
 - 21 providers + 45 places. **All 66 in Erie County** (no adjacent-county tail this batch).
 - By category: transit 15, healthcare 11, arts_culture 10, disability_services 9,
   parks_recreation 9, library 6, business 6 (after conversion drops; PAL counts under transit).
@@ -29,8 +30,8 @@ npm run seed:import -- research/seed-nys/wny-2026-07b.seed.json --dry-run
 |---|---|---|
 | Excluded — not operational | `planned_not_operational` | Highmark Stadium (old venue retiring, new venue opening 2026 season — re-add when its guide is live) |
 | Excluded — reviewer decision | storefront unconfirmed (no OCM retail license) | Combat Vet Cannabis |
-| Dropped 1 claim (listing kept) | physical-safety caution — never assert access on partial-access records (§4) | Martin House (accessible_parking — a single spot; not reviewer-restored) |
 | **Restored 6 claims** | reviewer (project owner) has personally visited and signed off 2026-07-09; caution flags stay on the records | Kleinhans (restroom+parking), Botanical Gardens (restroom+parking), Graycliff (parking), Theatre of Youth (restroom — venue confirmed open, 2026-27 season announced) |
+| **Restored 1 claim** | reviewer chose to include it 2026-07-09 (no visit claimed) — first-party-sourced, single-spot caveat kept in the claim note, community validation applies as always | Martin House (accessible_parking) |
 | Category | explicit `category` on each raw record (converter now honors it) | all 68 |
 
 ## Merge-time review decisions (orchestrator, 2026-07-09 — confirm at human review)
@@ -62,9 +63,11 @@ npm run seed:import -- research/seed-nys/wny-2026-07b.seed.json --dry-run
   restroom/parking claims (encoded in `convert.mjs` `KEEP_ATTRS_DESPITE_CAUTION`;
   the `partial_accessibility_caution` flags stay on the records). Theatre of
   Youth confirmed still operating (2026-27 season announced on its site).
-  **Martin House's single-spot parking claim stays dropped** (not visited/signed
-  off). Reminder: the restored claims are still `self_reported` — the owner's
-  visits become real confirmations only through the contribute flow (§4).
+  **Martin House's parking claim was also restored in a second pass** — the
+  reviewer chose to include it (no visit claimed) with the single-spot caveat
+  kept in the claim note. Reminder: all restored claims are still
+  `self_reported` — visits become real confirmations only through the
+  contribute flow (§4), and the ≥3-confirmation bar applies unchanged.
 - [ ] Confirm the 2 excluded listings stay excluded (Highmark until the new
   stadium's guide is live; Combat Vet Cannabis until a storefront is confirmed).
 - [ ] Spot-check the 211WNY-derived `entrance_step_free` claims (6 records,
