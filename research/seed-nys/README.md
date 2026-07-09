@@ -38,7 +38,9 @@ seed data is a starting point, never a substitute for first-person confirmation.
 - `convert.mjs` — deterministic converter (raw batch → importer format), applying the
   gaps.md §4 data-quality rules. Re-run: `node research/seed-nys/convert.mjs`.
 - `wny-2026-07.seed.json` — the **candidate** import file. 42 listings, 33 self-reported
-  claims (post-review numbers; see CONVERSION-NOTES.md). **Not reviewed for import.**
+  claims (post-review numbers; see CONVERSION-NOTES.md). **Imported to the LOCAL dev
+  database 2026-07-09** (owner-approved; there is no production DB yet — §13 hosting
+  is still open, so no public import has happened).
 - `CONVERSION-NOTES.md` — every automated decision + the checklist a human must clear
   before import.
 
@@ -47,7 +49,10 @@ seed data is a starting point, never a substitute for first-person confirmation.
 - `attributes-2.csv` — batch-2 attribute claims, flat.
 - `sources-memo-2.md` / `gaps-2.md` — sources used + coverage gaps/flags (delta to batch 1's).
 - `wny-2026-07b.seed.json` — the **candidate** import file. 66 listings, 35 self-reported
-  claims. **Partially reviewed (restore decisions 2026-07-09), not imported.**
+  claims. **Reviewed (restore decisions 2026-07-09) and imported to the LOCAL dev
+  database 2026-07-09** (owner-approved; no production DB exists yet). Verified in DB:
+  all 68 seeded claims across both batches read `self_reported`, zero confirmations.
+  Remaining pre-*publication* checks live in CONVERSION-NOTES-2.md.
 - `CONVERSION-NOTES-2.md` — automated decisions + the human-review checklist.
 - Convert: `node research/seed-nys/convert.mjs research/seed-nys/listings-2.json research/seed-nys/wny-2026-07b.seed.json "WNY seed research batch 2 2026-07-09 (Erie County beachhead, §3)"`
 
