@@ -85,10 +85,17 @@ platform IdP is Phase 0 (not stood up). Current state:
   unit-tested) driven by the `scripts/data-rights.mjs` ops CLI. Keyed by
   contributor id today; the Keycloak `sub` resolves to it later with no change to
   the module.
-  - [ ] Self-service front door (a "download / delete my data" endpoint) — deferred
-    to the same milestone as the authenticated contribute flow, so it isn't an
-    unauthenticated destructive endpoint. The mechanism is ready; only the UI door
-    waits on identity.
+  - [x] **Self-service front door** — `/account/` (see what we hold + counts),
+    `POST /api/account/export` (immediate JSON download), and `/account/delete/`
+    → `POST /api/account/delete` (typed-word destructive-action confirmation,
+    the a11y-audit Tier 3 pattern). Gated by the contributor seam
+    (`getAccountContributor`: verified session, or the provisional stand-in when
+    explicitly enabled — resolves only to *yourself*, never creates a
+    contributor, never resurrects a deleted one from a stale cookie). Reuses the
+    same `data-rights.ts` implementation as the ops CLI; self-service never
+    purges submitted listings (ops-only override). §4 consensus side effects
+    (a departing dissent un-freezing a claim) are logged for re-review, never
+    silent. Phase B attach point: step-up (ACR) goes on the delete endpoint.
 - [ ] Adopt shared a11y design tokens where they don't regress the zero-JS browsing surface.
 
 ## Register the Keycloak client (when the IdP is stood up)
@@ -112,9 +119,11 @@ KEYCLOAK_REDIRECT_URI=${APP_ORIGIN}/api/auth/callback
 ```
 
 Setting all three flips `keycloakConfigured()` true: contribution switches from the
-provisional cookie to real auth, and unauthenticated writes return `need_signin`.
-No code change. Phase B then narrows service-role writes to RLS-scoped sessions,
-adds step-up (ACR), and opens the self-service data-rights door.
+provisional cookie to real auth, and unauthenticated writes return `need_signin` —
+including the self-service data-rights door (`/account/`), which then requires a
+verified session. No code change. Phase B then narrows service-role writes to
+RLS-scoped sessions and adds step-up (ACR) on sensitive actions (the delete
+endpoint is the marked attach point).
 
 ## The five platform invariants (fallback copy — canonical version in governance `INVARIANTS.md`)
 

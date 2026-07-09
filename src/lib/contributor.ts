@@ -20,7 +20,8 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 import { keycloakConfigured } from './auth/config';
 import { SESSION_COOKIE, verifySession } from './auth/session';
 
-const COOKIE = 'aa_contributor';
+export const PROVISIONAL_COOKIE = 'aa_contributor';
+const COOKIE = PROVISIONAL_COOKIE;
 
 export function provisionalContributionsAllowed(): boolean {
   return import.meta.env.ALLOW_PROVISIONAL_CONTRIBUTIONS === 'true';
@@ -133,6 +134,45 @@ export async function resolveContributor(
     return { contributor: await getOrCreateContributor(cookies, admin, opts.pseudonym) };
   }
   return { gate: 'disabled' };
+}
+
+/** The contributor whose data the account/data-rights pages may manage. */
+export interface AccountContributor {
+  id: string;
+  provisional: boolean;
+  pseudonym: string | null;
+}
+
+/**
+ * Resolve the contributor whose DATA this browser can manage (the /account
+ * data-rights pages) — WITHOUT ever creating one. A verified session wins; the
+ * provisional cookie counts only when the provisional stand-in is enabled AND
+ * its contributor row still exists. After a deletion the stale cookie must
+ * honestly resolve to "nothing held", never resurrect a record (§6).
+ */
+export async function getAccountContributor(
+  cookies: AstroCookies,
+  admin: SupabaseClient,
+): Promise<AccountContributor | null> {
+  const sessionId = await verifySession(admin, cookies.get(SESSION_COOKIE)?.value);
+  const provisionalId =
+    !sessionId && !keycloakConfigured() && provisionalContributionsAllowed()
+      ? (cookies.get(COOKIE)?.value ?? null)
+      : null;
+  const id = sessionId ?? provisionalId;
+  if (!id) return null;
+
+  const { data, error } = await admin
+    .from('contributors')
+    .select('id, pseudonym')
+    .eq('id', id)
+    .maybeSingle();
+  if (error || !data) return null;
+  return {
+    id: data.id as string,
+    provisional: !sessionId,
+    pseudonym: (data.pseudonym as string | null) ?? null,
+  };
 }
 
 /** What the contribute PAGES need to render the right sign-in affordance. */

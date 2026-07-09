@@ -8,14 +8,27 @@
 // module doesn't change. That's deliberate: identity stores identity only; each
 // app owns its own data lifecycle (invariant #3).
 //
-// WHY A LIBRARY, NOT A PUBLIC ENDPOINT (yet): there is no real auth (Keycloak is
-// Phase 0), so a web-exposed "delete my data" endpoint would either be
-// unauthenticated (dangerous) or gated-off like the write flow (useless). The
-// mechanism lives here and is driven by the ops script (scripts/data-rights.mjs)
-// or a platform deletion signal. The self-service UI endpoint lights up with the
-// rest of the contribute flow once identity is real. The WORKFLOW is complete
-// now (invariant #3 asks for that); only the front door is deferred.
+// TWO FRONT DOORS, ONE IMPLEMENTATION: the ops CLI (scripts/data-rights.mjs)
+// and the self-service pages (/account, via src/pages/api/account/*) both call
+// exactly these functions — there is no second copy of deletion logic to drift.
+// Self-service is gated by the contributor seam (a verified Keycloak session,
+// or the provisional stand-in when explicitly enabled) and never purges
+// submitted listings; the purge override stays ops-only.
 import type { SupabaseClient } from '@supabase/supabase-js';
+
+// ---------------------------------------------------------------------------
+// Destructive-action confirmation (a11y crossover audit, Tier 3).
+// ---------------------------------------------------------------------------
+
+// Both the ops CLI and the self-service delete page require the person to TYPE
+// this word before anything is erased — a stray click or Enter press must never
+// destroy data. Trim + case tolerant on purpose (§5 cognitive access): the
+// friction we want is "read and decide", not "match exact casing".
+export const DELETE_CONFIRM_PHRASE = 'delete';
+
+export function confirmsDeletion(input: unknown): boolean {
+  return typeof input === 'string' && input.trim().toLowerCase() === DELETE_CONFIRM_PHRASE;
+}
 
 // ---------------------------------------------------------------------------
 // Export — everything we hold that is tied to this contributor.
