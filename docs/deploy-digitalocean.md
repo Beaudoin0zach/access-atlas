@@ -14,16 +14,30 @@ Platform, app data on a Supabase **cloud** project. Decision shape chosen
 ## What only you can do (the two manual gates)
 
 1. **Create the Supabase cloud project** — App Platform can't provision it (different
-   vendor). At <https://supabase.com>: New Project → note the **Project URL**, the
-   **anon** key, and the **service_role** key (Settings → API). Then apply this
-   repo's migrations + seed to it:
+   vendor). At <https://supabase.com>: New Project (region near NYC) → from
+   **Settings → API** copy the **Project URL**, the **publishable** (`sb_publishable_…`,
+   anon-equivalent) key, and the **secret** (`sb_secret_…`, service-role-equivalent) key.
+   Then set up the schema — **zero DB credentials needed**:
    ```
-   npx supabase link --project-ref <ref>
-   npx supabase db push          # applies supabase/migrations/*
-   # then import your reviewed seed batches against the cloud project:
-   #   PUBLIC_SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY set to the cloud project,
-   #   npm run seed:import -- research/seed-nys/wny-2026-07.seed.json   (etc.)
+   # Dashboard → SQL Editor → New query → paste supabase/provision-cloud.sql → Run.
+   # That file is migrations 0001-0007 + the attribute catalog, NO demo data.
+   # (Alternative if you prefer the CLI: npx supabase link --project-ref <ref>
+   #  && npx supabase db push — needs a Supabase access token + the DB password.)
    ```
+   Then import the reviewed seed batches against the cloud project (needs the
+   secret key as SUPABASE_SERVICE_ROLE_KEY):
+   ```
+   PUBLIC_SUPABASE_URL=https://<ref>.supabase.co \
+   SUPABASE_SERVICE_ROLE_KEY=sb_secret_... \
+     npm run seed:import -- research/seed-nys/wny-2026-07.seed.json
+   # repeat for wny-2026-07b.seed.json (batch 2); batch 3 (…c) after its import decision.
+   ```
+
+   > **New key format note:** this project began on local Supabase's legacy
+   > `anon`/`service_role` JWT keys; the cloud project uses the newer
+   > `sb_publishable_…` / `sb_secret_…` keys. `@supabase/supabase-js` passes the key
+   > string through unchanged, and the publishable key was verified against the live
+   > REST API — so no code change is needed; just use the new keys in the env slots.
 2. **Authorize DigitalOcean ↔ GitHub** (once): DO console → Apps → the GitHub
    authorization prompt, granting access to `Beaudoin0zach/access-atlas`. (Skip if
    you'd rather deploy from a container image pushed to DOCR — ask and I'll switch
