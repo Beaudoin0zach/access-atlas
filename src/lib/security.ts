@@ -28,7 +28,7 @@
 // origin is non-https we allow exactly that origin. In production Supabase is
 // https and this adds nothing — the shipped policy is unchanged.
 const devStorageOrigin = (() => {
-  const url = import.meta.env.PUBLIC_SUPABASE_URL;
+  const url = process.env.PUBLIC_SUPABASE_URL; // runtime read (see supabase.ts)
   if (!url || url.startsWith('https://')) return null;
   try {
     return new URL(url).origin;
