@@ -39,8 +39,8 @@ seed data is a starting point, never a substitute for first-person confirmation.
   gaps.md §4 data-quality rules. Re-run: `node research/seed-nys/convert.mjs`.
 - `wny-2026-07.seed.json` — the **candidate** import file. 42 listings, 33 self-reported
   claims (post-review numbers; see CONVERSION-NOTES.md). **Imported to the LOCAL dev
-  database 2026-07-09** (owner-approved; there is no production DB yet — §13 hosting
-  is still open, so no public import has happened).
+  database 2026-07-09** (owner-approved) and **now live in production** on the
+  DigitalOcean deployment.
 - `CONVERSION-NOTES.md` — every automated decision + the checklist a human must clear
   before import.
 
@@ -50,7 +50,7 @@ seed data is a starting point, never a substitute for first-person confirmation.
 - `sources-memo-2.md` / `gaps-2.md` — sources used + coverage gaps/flags (delta to batch 1's).
 - `wny-2026-07b.seed.json` — the **candidate** import file. 66 listings, 35 self-reported
   claims. **Reviewed (restore decisions 2026-07-09) and imported to the LOCAL dev
-  database 2026-07-09** (owner-approved; no production DB exists yet). Verified in DB:
+  database 2026-07-09** (owner-approved), and **now live in production**. Verified in DB:
   all 68 seeded claims across both batches read `self_reported`, zero confirmations.
   Remaining pre-*publication* checks live in CONVERSION-NOTES-2.md.
 - `CONVERSION-NOTES-2.md` — automated decisions + the human-review checklist.
@@ -58,8 +58,11 @@ seed data is a starting point, never a substitute for first-person confirmation.
 
 **Batch 3 (2026-07-10 — owner lead-list slices by value × defensibility + the certified disabled-veteran sweep):**
 - `listings-3.json` / `listings-3.csv` / `attributes-3.csv` — 56 candidate records.
-- `wny-2026-07c.seed.json` — the **candidate** import file. 55 listings, 6 self-reported
-  claims, 5 certified disabled-veteran-owned businesses. **Not reviewed, not imported.**
+- `wny-2026-07c.seed.json` — the import file. 55 listings, 6 self-reported
+  claims, 5 certified disabled-veteran-owned businesses. **Reviewed (checklist cleared
+  2026-07-10, CONVERSION-NOTES-3.md) and imported to production 2026-07-11** (108 → 163
+  live listings). The veteran-owned `disabled_owned` basis is documented in
+  [`docs/seed-format.md`](../../docs/seed-format.md) (government-certification proxy, §12).
 - `CONVERSION-NOTES-3.md` — sources + gaps + conversion decisions + review checklist
   (single consolidated doc from this batch on).
 - Convert: `node research/seed-nys/convert.mjs research/seed-nys/listings-3.json research/seed-nys/wny-2026-07c.seed.json "WNY seed research batch 3 2026-07-10 (Erie County beachhead, §3)"`
