@@ -49,6 +49,27 @@ test('home has skip link, one h1, and a main landmark', async ({ page }) => {
   await expect(page.locator('main#main')).toBeVisible();
 });
 
+// The community-validation layer is the moat (§4): a listing with claims must
+// expose a prominent entry point into the per-attribute confirm flow. Assert the
+// top-level "Report a visit" CTA anchors to the accessibility section, and that
+// each claim row carries its own link into /contribute/confirm/{claimId}/.
+test('seeded place exposes the report-a-visit CTA + per-attribute confirm links', async ({ page }) => {
+  await page.goto('/places/11111111-1111-1111-1111-111111111111/');
+
+  const cta = page.locator('aside.report-cta a.btn');
+  await expect(cta).toHaveText(/report a visit/i);
+  await expect(cta).toHaveAttribute('href', '#accessibility');
+  // The anchor target exists (keyboard/screen-reader users must land somewhere).
+  await expect(page.locator('#accessibility')).toBeVisible();
+
+  // Every claim row links into the confirm flow.
+  const confirmLinks = page.locator('.attr-list a.report-link');
+  expect(await confirmLinks.count()).toBeGreaterThan(0);
+  for (const href of await confirmLinks.evaluateAll((els) => els.map((e) => e.getAttribute('href')))) {
+    expect(href).toMatch(/^\/contribute\/confirm\/[^/]+\/$/);
+  }
+});
+
 // The browsing surface must stay zero-JS even though list/detail pages are now
 // on-demand rendered (low-bandwidth mandate, §5). No <script> on these routes.
 for (const route of ['/', '/places/', '/places/?q=cafe&owned=1', '/providers/', '/settings/', '/about/accessibility/', '/about/help/', '/places/11111111-1111-1111-1111-111111111111/', '/account/', '/account/delete/']) {

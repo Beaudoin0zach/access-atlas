@@ -627,6 +627,21 @@ details p:last-child { margin-bottom: 0; }
   border-radius: 0 var(--radius) var(--radius) 0;
 }
 .disclaimer p:last-child { margin-bottom: 0; }
+
+/* -------- Report-a-visit CTA (§4 — entry to the validation moat) ---------
+   A prominent, honest signpost into the per-attribute confirm flow. Tinted
+   accent so it reads as an invitation, not a warning (unlike .disclaimer). */
+.report-cta {
+  border: 1px solid color-mix(in srgb, var(--brand) 30%, var(--color-border));
+  border-left: 4px solid var(--brand);
+  background: var(--brand-wash);
+  padding: 1rem 1.15rem;
+  margin: 1.5rem 0;
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+.report-cta-title { margin-top: 0; font-size: 1.15rem; }
+.report-cta p { margin-bottom: 1rem; }
+.report-cta .btn { text-decoration: none; }
 code {
   background: var(--color-surface-2);
   border: 1px solid var(--color-border);

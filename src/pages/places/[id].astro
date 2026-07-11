@@ -6,6 +6,7 @@ export const prerender = false;
 
 import Base from '../../layouts/Base.astro';
 import AttributeList from '../../components/AttributeList.astro';
+import ReportVisitCta from '../../components/ReportVisitCta.astro';
 import CategoryIcon from '../../components/CategoryIcon.astro';
 import { categoryLabel, isCategory } from '../../lib/categories';
 import { getEvidenceForListing, getListing, getStatusesForListing } from '../../lib/repo';
@@ -46,6 +47,8 @@ const justSubmitted = Astro.url.searchParams.get('submitted') === '1';
       {place && <p class="listing-meta">{place}</p>}
       {listing.summary && <p>{listing.summary}</p>}
 
+      <ReportVisitCta target="#accessibility" hasClaims={statuses.length > 0} />
+
       {(listing.disabledOwned || listing.disabledLed) && (
         <>
           <h2>Ownership &amp; leadership</h2>
@@ -57,7 +60,7 @@ const justSubmitted = Astro.url.searchParams.get('submitted') === '1';
         </>
       )}
 
-      <h2>Accessibility</h2>
+      <h2 id="accessibility">Accessibility</h2>
       <p>
         Each item below is validated on its own. We never roll accessibility up
         into a single star rating.
