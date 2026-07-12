@@ -50,14 +50,27 @@ describe('parseListingFilters', () => {
     expect(hasActiveFilters(f, 'place')).toBe(false);
   });
 
-  it('defaults sort to name, accepts zip, ignores anything else', () => {
+  it('defaults sort to name and accepts every known key, ignoring anything else', () => {
     expect(parse('').sort).toBe('name');
     expect(parse('sort=zip').sort).toBe('zip');
+    expect(parse('sort=recent').sort).toBe('recent');
+    expect(parse('sort=distance').sort).toBe('distance');
     expect(parse('sort=bogus').sort).toBe('name');
   });
 
   it('a non-default sort is NOT an active filter (it never narrows)', () => {
     expect(hasActiveFilters(parse('sort=zip'), 'place')).toBe(false);
+  });
+
+  it('parses zip as digits-only, capped at 5', () => {
+    expect(parse('zip=14222').zip).toBe('14222');
+    expect(parse('zip=142').zip).toBe('142'); // partial = area prefix
+    expect(parse('zip=1-4-2-2-2-9').zip).toBe('14222'); // strips non-digits, caps
+    expect(parse('zip=abc').zip).toBe('');
+  });
+
+  it('counts a zip filter as active (it narrows)', () => {
+    expect(hasActiveFilters(parse('zip=142'), 'place')).toBe(true);
   });
 });
 
@@ -79,6 +92,18 @@ describe('applyListingFilters', () => {
   it('filters by category and county', () => {
     expect(applyListingFilters(SAMPLE, parse('category=healthcare')).map((l) => l.id)).toEqual(['4']);
     expect(applyListingFilters(SAMPLE, parse('county=Niagara+County')).map((l) => l.id)).toEqual(['2']);
+  });
+
+  it('filters by zip as a PREFIX (a partial zip keeps the whole area)', () => {
+    const rows = [
+      listing({ id: 'a', postalCode: '14222' }),
+      listing({ id: 'b', postalCode: '14201' }),
+      listing({ id: 'c', postalCode: '13202' }), // Syracuse — different area
+      listing({ id: 'd', postalCode: null }),
+    ];
+    expect(applyListingFilters(rows, parse('zip=142')).map((l) => l.id)).toEqual(['a', 'b']);
+    expect(applyListingFilters(rows, parse('zip=14222')).map((l) => l.id)).toEqual(['a']);
+    expect(applyListingFilters(rows, parse('zip=99')).map((l) => l.id)).toEqual([]);
   });
 
   it('representation flags are independent and narrow-only (§1)', () => {
@@ -130,6 +155,24 @@ describe('sortListings', () => {
     const out = sortListings(input, 'zip');
     expect(out).not.toBe(input);
     expect(input.map((l) => l.id)).toEqual(snapshot);
+  });
+
+  it('sorts by recent (newest createdAt first), missing dates last, name tiebreak', () => {
+    const rows = [
+      listing({ id: 'old', name: 'B', createdAt: '2026-01-01T00:00:00Z' }),
+      listing({ id: 'new', name: 'C', createdAt: '2026-07-01T00:00:00Z' }),
+      listing({ id: 'nodate', name: 'A', createdAt: null }),
+    ];
+    expect(sortListings(rows, 'recent').map((l) => l.id)).toEqual(['new', 'old', 'nodate']);
+  });
+
+  it("server 'distance' sort falls back to name (real distance is client-side)", () => {
+    const rows = [
+      listing({ id: 'z', name: 'Zed', postalCode: '14201' }),
+      listing({ id: 'a', name: 'Ann', postalCode: '14999' }),
+    ];
+    // No coords / no visitor location server-side → deterministic name order.
+    expect(sortListings(rows, 'distance').map((l) => l.id)).toEqual(['a', 'z']);
   });
 });
 

@@ -67,11 +67,30 @@ const panelOpen = active || filters.sort !== 'name';
         </select>
       </p>
       <p>
-        {/* Sort is ordering, not filtering — it reorders the same cards. */}
+        <label for="filter-zip">ZIP code</label>
+        {/* Prefix match — a partial ZIP keeps a whole area. inputmode=numeric
+            brings up the number pad on mobile; not type=number (that adds
+            spinners and strips leading zeros). */}
+        <input
+          type="text"
+          id="filter-zip"
+          name="zip"
+          value={filters.zip}
+          inputmode="numeric"
+          autocomplete="postal-code"
+          maxlength="5"
+          placeholder="e.g. 14222"
+        />
+      </p>
+      <p>
+        {/* Sort is ordering, not filtering — it reorders the same cards. The
+            "Distance (nearest)" option is added by the location enhancement
+            script, so it only appears when JS can actually compute it. */}
         <label for="filter-sort">Sort by</label>
         <select id="filter-sort" name="sort">
           <option value="name" selected={filters.sort === 'name'}>Name (A–Z)</option>
-          <option value="zip" selected={filters.sort === 'zip'}>Zip code</option>
+          <option value="zip" selected={filters.sort === 'zip'}>ZIP code</option>
+          <option value="recent" selected={filters.sort === 'recent'}>Recently added</option>
         </select>
       </p>
     </div>
