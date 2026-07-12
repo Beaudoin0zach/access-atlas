@@ -24,9 +24,13 @@ interface Props {
 }
 const { kind, filters, counties, active, action } = Astro.props;
 const noun = kind === 'provider' ? 'providers' : 'places';
+// Keep the panel open when a non-default SORT is chosen too — otherwise the list
+// would come back reordered with no visible reason (the sort control is inside
+// the panel). Sorting still isn't a "filter" (it doesn't change the count).
+const panelOpen = active || filters.sort !== 'name';
 ---
 
-<details class="filter-panel" open={active}>
+<details class="filter-panel" open={panelOpen}>
   <summary>Search &amp; filter {noun}</summary>
   <form method="get" action={action}>
     <div class="filter-grid">
@@ -60,6 +64,33 @@ const noun = kind === 'provider' ? 'providers' : 'places';
               {c}
             </option>
           ))}
+        </select>
+      </p>
+      <p>
+        <label for="filter-zip">ZIP code</label>
+        {/* Prefix match — a partial ZIP keeps a whole area. inputmode=numeric
+            brings up the number pad on mobile; not type=number (that adds
+            spinners and strips leading zeros). */}
+        <input
+          type="text"
+          id="filter-zip"
+          name="zip"
+          value={filters.zip}
+          inputmode="numeric"
+          autocomplete="postal-code"
+          maxlength="5"
+          placeholder="e.g. 14222"
+        />
+      </p>
+      <p>
+        {/* Sort is ordering, not filtering — it reorders the same cards. The
+            "Distance (nearest)" option is added by the location enhancement
+            script, so it only appears when JS can actually compute it. */}
+        <label for="filter-sort">Sort by</label>
+        <select id="filter-sort" name="sort">
+          <option value="name" selected={filters.sort === 'name'}>Name (A–Z)</option>
+          <option value="zip" selected={filters.sort === 'zip'}>ZIP code</option>
+          <option value="recent" selected={filters.sort === 'recent'}>Recently added</option>
         </select>
       </p>
     </div>

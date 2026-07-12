@@ -37,6 +37,9 @@ export interface Listing {
   provider?: {
     disabilityLiterate: boolean;
   };
+  // When the listing was submitted (ISO). Drives the "recently added" sort so
+  // fresh community submissions are discoverable. May be null (seed rows).
+  createdAt?: string | null;
 }
 
 // One selectable attribute in the submission form (filtered by listing kind).
