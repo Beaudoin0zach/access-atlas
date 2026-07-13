@@ -119,9 +119,9 @@ Differences you should expect (not bugs):
 
 - **Places** starts with "Accessible places" and a sentence saying **how many
   places are listed** — you should not have to count.
-- **Providers** starts with "Providers" and a short explanation that
-  disability-literate and disabled-owned/-led are tracked separately. It does
-  **not** announce a count today — a known gap we've already filed.
+- **Providers** starts with "Providers" and a sentence saying **how many
+  providers are listed**, followed by a short explanation that
+  disability-literate and disabled-owned/-led are tracked separately.
 - An **empty list** should explain itself honestly (coverage starts thin in
   Buffalo / Erie County on purpose) and offer a way to contribute — never just
   silence. Your facilitator may show you one.
