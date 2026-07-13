@@ -18,6 +18,30 @@ const siteName = 'Access Atlas';
 // prerendered page (build time) there is no request cookie, so this is just the
 // defaults; that's why the pages that should honor settings set prerender=false.
 const rootAttrs = settingsToRootAttrs(parseSettings(Astro.cookies.get(SETTINGS_COOKIE)?.value));
+
+// Primary-nav "you are here" (§1: always show the current location). The active
+// item gets aria-current="page" for assistive tech PLUS a visible style in
+// global.css (persistent underline + bold — a shape/weight cue, never colour
+// alone, WCAG 1.4.1). Zero client JS: we already have the request path here.
+//
+// Matching is PREFIX, not exact, so a section stays lit on its detail pages
+// (/places/[id] keeps "Places" current). Every href ends in "/" and no nav href
+// is a prefix of another (/about/help/ vs /about/privacy/ etc.), so prefix
+// matching can't light two items at once. Trailing slash is normalised so
+// "/places" and "/places/" resolve the same. Pages with no matching section
+// (e.g. /contribute/confirm/…) simply light nothing — better than a wrong guess.
+const NAV = [
+  { href: '/places/', label: 'Places' },
+  { href: '/providers/', label: 'Providers' },
+  { href: '/contribute/submit/', label: 'Suggest a listing' },
+  { href: '/about/help/', label: 'Help' },
+  { href: '/settings/', label: 'Accessibility' },
+  { href: '/about/privacy/', label: 'Privacy' },
+];
+const herePath = Astro.url.pathname.endsWith('/')
+  ? Astro.url.pathname
+  : `${Astro.url.pathname}/`;
+const isCurrent = (href: string): boolean => herePath.startsWith(href);
 ---
 
 <!doctype html>
@@ -60,12 +84,11 @@ const rootAttrs = settingsToRootAttrs(parseSettings(Astro.cookies.get(SETTINGS_C
         </a>
         <nav aria-label="Primary">
           <ul>
-            <li><a href="/places/">Places</a></li>
-            <li><a href="/providers/">Providers</a></li>
-            <li><a href="/contribute/submit/">Suggest a listing</a></li>
-            <li><a href="/about/help/">Help</a></li>
-            <li><a href="/settings/">Accessibility</a></li>
-            <li><a href="/about/privacy/">Privacy</a></li>
+            {NAV.map(({ href, label }) => (
+              <li>
+                <a href={href} aria-current={isCurrent(href) ? 'page' : undefined}>{label}</a>
+              </li>
+            ))}
           </ul>
         </nav>
       </div>
