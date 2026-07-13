@@ -586,6 +586,12 @@ form fieldset {
   padding: 1rem 1.15rem 1.15rem;
   background: var(--color-surface);
   box-shadow: var(--shadow-sm);
+  /* Fieldsets default to min-inline-size: min-content, so a wide <select>
+     (its intrinsic width = its longest option) forces the whole page to
+     scroll sideways at high zoom — a WCAG 1.4.10 reflow failure. Letting the
+     fieldset shrink is what makes the selects' max-width: 100% actually
+     work. Asserted by the 320px reflow test in tests/a11y/pages.spec.ts. */
+  min-inline-size: 0;
 }
 form legend { font-weight: 650; padding: 0 0.4rem; }
 form label { font-weight: 500; }

@@ -48,6 +48,21 @@ for (const route of ROUTES) {
   });
 }
 
+// WCAG 1.4.10 Reflow: at 320 CSS px wide (equivalent to 400% zoom on a
+// 1280px screen) no page may need horizontal scrolling. This is the machine
+// half of the low-vision protocol (docs/manual-low-vision-testing.md) — the
+// human half (readability under magnification, contrast modes) stays manual.
+for (const route of ROUTES) {
+  test(`no horizontal overflow at 320px: ${route}`, async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 800 });
+    await page.goto(route);
+    const overflow = await page.evaluate(
+      () => document.documentElement.scrollWidth - document.documentElement.clientWidth
+    );
+    expect(overflow).toBe(0);
+  });
+}
+
 // A minimal structural check that survives refactors: every page must expose a
 // single <h1>, a main landmark, and a working skip link (§5). Automated axe
 // won't catch a missing skip link, so we assert it directly.

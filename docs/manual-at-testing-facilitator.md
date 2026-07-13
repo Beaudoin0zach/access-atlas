@@ -180,17 +180,24 @@ the person.
 
 ---
 
-## 6. Protocols this session does NOT cover (tracked follow-ups)
+## 6. The other protocols (one facilitator guide, several scripts)
 
-1. **Mobile VoiceOver run sheet** — needed regardless for the iOS TestFlight
-   track (CLAUDE.md §13); the desktop steps do not translate gesture-for-key.
-2. **Sighted keyboard-only / focus-visibility protocol** — the one failure
-   class a screen-reader session cannot see (invisible focus indicators);
-   distinct audience (motor/switch users).
-3. **Low-vision protocol** — 400% zoom reflow, OS magnification, Windows
-   forced-colors vs. the site's own high-contrast setting.
-4. **Keycloak sign-in screen a11y session** — once the platform IdP is stood
-   up.
+This guide's setup, logistics, and scoring sections apply to all of them.
 
-When one of these lands, it gets its own run sheet; don't bolt its steps onto
-the desktop script.
+1. **Sighted keyboard-only / focus-visibility** —
+   [`manual-keyboard-testing.md`](manual-keyboard-testing.md). Ready to run;
+   grounded against the shipped focus styles.
+2. **Low vision** —
+   [`manual-low-vision-testing.md`](manual-low-vision-testing.md). Ready to
+   run; its reflow/contrast halves are asserted in CI so the session spends
+   human time only on readability judgment.
+3. **Mobile VoiceOver** —
+   [`manual-at-testing-mobile.md`](manual-at-testing-mobile.md). **DRAFT** —
+   a delta against the desktop script. Do not book a paid session on it
+   until someone has dry-run it on a real iPhone and fixed what doesn't
+   hold.
+4. **Keycloak sign-in screen a11y session** — still blocked on the platform
+   IdP standup; no script exists yet.
+
+Keep each protocol its own script; don't bolt their steps onto the desktop
+sheet.
