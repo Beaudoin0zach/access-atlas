@@ -37,6 +37,30 @@ for (const route of ROUTES) {
       .analyze();
     expect(results.violations).toEqual([]);
   });
+
+  // Every page title names the page and ends with the site name, so a
+  // screen-reader user always knows where they are (§5). Asserted here so the
+  // manual AT run sheet (docs/manual-at-testing.md) doesn't have to spend
+  // paid tester time on it.
+  test(`title ends with site name: ${route}`, async ({ page }) => {
+    await page.goto(route);
+    await expect(page).toHaveTitle(/— Access Atlas$/);
+  });
+}
+
+// WCAG 1.4.10 Reflow: at 320 CSS px wide (equivalent to 400% zoom on a
+// 1280px screen) no page may need horizontal scrolling. This is the machine
+// half of the low-vision protocol (docs/manual-low-vision-testing.md) — the
+// human half (readability under magnification, contrast modes) stays manual.
+for (const route of ROUTES) {
+  test(`no horizontal overflow at 320px: ${route}`, async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 800 });
+    await page.goto(route);
+    const overflow = await page.evaluate(
+      () => document.documentElement.scrollWidth - document.documentElement.clientWidth
+    );
+    expect(overflow).toBe(0);
+  });
 }
 
 // A minimal structural check that survives refactors: every page must expose a
