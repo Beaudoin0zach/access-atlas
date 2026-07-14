@@ -384,6 +384,16 @@ header.site nav a {
   transition: border-color 0.15s ease;
 }
 header.site nav a:hover { border-bottom-color: rgba(255, 255, 255, 0.85); }
+/* "You are here" — the current section's nav item (aria-current="page" from
+   Base.astro). A SOLID underline plus bold weight: two non-colour cues (shape +
+   weight), so it reads for people who can't rely on the teal/white colour
+   difference (WCAG 1.4.1) and survives high-contrast, where the header keeps its
+   white-on-teal treatment. The 2px border matches the transparent default, so
+   marking an item current adds no height shift. */
+header.site nav a[aria-current="page"] {
+  border-bottom-color: #fff;
+  font-weight: 700;
+}
 /* Focus must be visible against teal — use a white ring here. */
 header.site a:focus-visible { outline-color: var(--header-focus); }
 
