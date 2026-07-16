@@ -22,6 +22,13 @@ const config: CapacitorConfig = {
     url: 'https://access-atlas-qd464.ondigitalocean.app',
     // Never allow cleartext — the CSP + privacy stance demand https only (§6).
     cleartext: false,
+    // Keep the Keycloak IdP IN the webview. Capacitor otherwise treats any host
+    // other than `url` as external and kicks it out to the system browser — which
+    // would bounce the OIDC login redirect to Safari and break the round-trip.
+    // Everything NOT listed here still opens in Safari (the desired behavior for
+    // external links a listing points at). Salvaged from the retired Expo wrapper
+    // (access-atlas-mobile), whose App.js got this right.
+    allowNavigation: ['id.kindredaccess.org'],
   },
   ios: {
     // Match the web app's calm background so first paint isn't a white flash.
