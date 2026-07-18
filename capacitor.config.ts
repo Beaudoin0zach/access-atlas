@@ -28,7 +28,7 @@ const config: CapacitorConfig = {
     // Everything NOT listed here still opens in Safari (the desired behavior for
     // external links a listing points at). Salvaged from the retired Expo wrapper
     // (access-atlas-mobile), whose App.js got this right.
-    allowNavigation: ['id.kindredaccess.org'],
+    allowNavigation: ['id.beauaccesssolutions.com'],
   },
   ios: {
     // Match the web app's calm background so first paint isn't a white flash.
