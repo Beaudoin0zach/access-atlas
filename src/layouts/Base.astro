@@ -24,16 +24,20 @@ const rootAttrs = settingsToRootAttrs(parseSettings(Astro.cookies.get(SETTINGS_C
 // global.css (persistent underline + bold — a shape/weight cue, never colour
 // alone, WCAG 1.4.1). Zero client JS: we already have the request path here.
 //
-// Matching is PREFIX, not exact, so a section stays lit on its detail pages
-// (/places/[id] keeps "Places" current). Every href ends in "/" and no nav href
-// is a prefix of another (/about/help/ vs /about/privacy/ etc.), so prefix
-// matching can't light two items at once. Trailing slash is normalised so
+// Matching is PREFIX by default, so a section stays lit on its detail pages
+// (/places/[id] keeps "Places" current). Trailing slash is normalised so
 // "/places" and "/places/" resolve the same. Pages with no matching section
 // (e.g. /contribute/confirm/…) simply light nothing — better than a wrong guess.
+//
+// "/about/" is the exception: it IS a prefix of /about/help/ and /about/privacy/,
+// so under prefix matching it would light alongside them and emit two
+// aria-current="page" nodes in one nav. It's marked `exact` for that reason —
+// keep that flag if you add more pages under /about/.
 const NAV = [
   { href: '/places/', label: 'Places' },
   { href: '/providers/', label: 'Providers' },
   { href: '/contribute/submit/', label: 'Suggest a listing' },
+  { href: '/about/', label: 'About', exact: true },
   { href: '/about/help/', label: 'Help' },
   { href: '/settings/', label: 'Accessibility' },
   { href: '/about/privacy/', label: 'Privacy' },
@@ -41,7 +45,8 @@ const NAV = [
 const herePath = Astro.url.pathname.endsWith('/')
   ? Astro.url.pathname
   : `${Astro.url.pathname}/`;
-const isCurrent = (href: string): boolean => herePath.startsWith(href);
+const isCurrent = (href: string, exact = false): boolean =>
+  exact ? herePath === href : herePath.startsWith(href);
 ---
 
 <!doctype html>
@@ -84,9 +89,9 @@ const isCurrent = (href: string): boolean => herePath.startsWith(href);
         </a>
         <nav aria-label="Primary">
           <ul>
-            {NAV.map(({ href, label }) => (
+            {NAV.map(({ href, label, exact }) => (
               <li>
-                <a href={href} aria-current={isCurrent(href) ? 'page' : undefined}>{label}</a>
+                <a href={href} aria-current={isCurrent(href, exact) ? 'page' : undefined}>{label}</a>
               </li>
             ))}
           </ul>
@@ -106,6 +111,7 @@ const isCurrent = (href: string): boolean => herePath.startsWith(href);
           see <a href="/about/privacy/">how we label trust</a>.
         </p>
         <p class="footer-links">
+          <a href="/about/">About</a> ·
           <a href="/about/help/">Help &amp; plain words</a> ·
           <a href="/settings/">Accessibility settings</a> ·
           <a href="/about/accessibility/">Accessibility statement</a> ·

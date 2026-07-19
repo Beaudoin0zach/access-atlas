@@ -1,0 +1,107 @@
+---
+// About / mission. This is the page that carries the project's voice — why it
+// exists, who "we" is, and why the scope is deliberately small. Everything here
+// must stay true today (same rule as the accessibility statement): no roadmap
+// claims written in the present tense.
+// On-demand so a visitor's saved accessibility settings apply while they read it.
+export const prerender = false;
+
+import Base from '../../layouts/Base.astro';
+---
+
+<Base
+  title="About"
+  description="Why Access Atlas exists, who builds it, and why it starts in Buffalo and Erie County rather than everywhere."
+>
+  <h1>About Access Atlas</h1>
+
+  <p class="lead">
+    Access Atlas is a directory of accessible places and disabled-led providers in
+    Buffalo and Erie County, built by disabled people. It exists because the
+    accessibility information we could already find was not written by anyone who
+    had to use it.
+  </p>
+
+  {/*
+    TODO (Zach) — the opening scene. This is the one paragraph nobody else can
+    write: a specific local instance of the failure, in the first person. The
+    listing that said accessible and meant a step at the door; the clinic whose
+    accessible entrance was locked after five; whatever the real one is. Roughly
+    80 words, concrete, one place, one day. The rest of this page is built to
+    land after it — it currently reads as an argument without its evidence.
+  */}
+
+  <h2>What goes wrong</h2>
+  <p>
+    Accessibility information fails in a predictable way. It is written by the
+    people who own the building rather than the people who have to get into it,
+    so it records intent instead of reality — a ramp that exists but is chained
+    shut, a “step-free entrance” around the back through the kitchen. Then it gets
+    flattened into a single star rating, which is the second failure: one number
+    cannot tell a wheelchair user and a Deaf visitor and someone with light
+    sensitivity what any of them needs to know. The information is not
+    insufficient. It is written from the wrong side of the door.
+  </p>
+
+  <h2>Who “we” is</h2>
+  <p>
+    Access Atlas is disabled-led. The people deciding what counts as an
+    accessibility fact here are people who get stopped by the lack of one. That is
+    not a credential we are claiming for marketing purposes — it is the reason the
+    labels on this site are shaped the way they are. Every trust label exists
+    because someone who needed the information got burned by its absence, and
+    wanted to know how much to trust it before making the trip.
+  </p>
+
+  <h2>Why Buffalo and Erie County</h2>
+  <p>
+    A national directory of unverified listings would be easy to build and worth
+    nothing. Every accessibility claim here has to be confirmed in person, by
+    someone who was actually there, which means coverage can only grow at the speed
+    people can walk and roll through it. So we started in one place, close to home,
+    where we can check.
+  </p>
+  <p>
+    This means the directory is thin. We would rather it be thin and true. A
+    listing that is missing costs you a search somewhere else; a listing that is
+    wrong costs you a trip, and sometimes a good deal more than that.
+  </p>
+
+  <h2>What we will not do</h2>
+  <ul>
+    <li>
+      We will never reduce accessibility to one star rating. Each fact stands on
+      its own, because each person needs different ones.
+    </li>
+    <li>
+      We will never require proof of disability. Owners self-attest; visitors
+      contribute pseudonymously. There is no medical gatekeeping here, ever.
+    </li>
+    <li>
+      We will never call self-reported information “verified”. Those are different
+      labels and they stay different, even when the directory looks emptier for it.
+    </li>
+    <li>
+      We will never sell your data or load third-party trackers to watch you read.
+    </li>
+  </ul>
+
+  <h2>How to check us</h2>
+  <p>
+    Everything above is checkable, which is the point. Our
+    <a href="/about/privacy/">trust labels</a> are defined in public and say exactly
+    what each one is worth. Our <a href="/about/accessibility/">accessibility
+    statement</a> describes what the site does today, links the evidence for the
+    one hard number it cites, and admits what our automated testing misses. The
+    code is open.
+  </p>
+
+  <div class="disclaimer">
+    <p>
+      If you know a place in Buffalo or Erie County that belongs here — or one we
+      have listed wrong — <a href="/contribute/submit/">tell us</a>. A single
+      credible report that somewhere is not accessible freezes the claim while we
+      re-check it. We would rather be corrected than trusted.
+    </p>
+  </div>
+</Base>

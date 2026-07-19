@@ -153,9 +153,13 @@ tune with dyslexic co-designers" is the correct posture. `[high, 3-0]`
    zero-JS control covering KA's `focus_mode` + `simplified_layout`; nothing is
    hidden, only quietened). Both cookie-backed, verified in the browser.
 4. **Accessible-map contract** documented *before* the map is built.
-5. **Manual AT testing plan** — automated tools catch only ~30–40%
-   (GOV.UK cites ~30%; our own docs say ~40%; CI currently runs only
-   `@axe-core/playwright`). Budget NVDA / VoiceOver / switch testing and paid
+5. **Manual AT testing plan** — a single automated tool catches well under half.
+   GOV.UK's 2017 test of ten checkers against 143 planted barriers is the source
+   worth citing: best *single* tool 41%, all ten *collectively* 71%, 29% missed by
+   every tool. Note the earlier "GOV.UK cites ~30%" here was a misreading of that
+   29%-missed figure — corrected 2026-07-19. Since CI currently runs only
+   `@axe-core/playwright`, the single-tool number (~40%) is the one that applies
+   to us, and it is what `about/accessibility.astro` now states and links. Budget NVDA / VoiceOver / switch testing and paid
    disabled co-designers to tune the contested items (font, dark mode, reading
    mode). `[high, 3-0]`
 
