@@ -237,4 +237,12 @@ const listingHref = claim
       </>
     )
   }
+
+  {/* Progressive enhancement, NATIVE-ONLY (§5/§13; ADR-0002): the form above is
+      fully usable with no JS — the file input is the baseline. This one
+      self-hosted script no-ops on the web and, only inside the Capacitor iOS app,
+      adds native camera capture (App Review 4.2). Scoped script-src 'self'
+      carve-out lives in src/lib/security.ts. is:inline keeps Astro from bundling
+      the public asset. */}
+  <script src="/confirm-camera.js" is:inline defer></script>
 </Base>
