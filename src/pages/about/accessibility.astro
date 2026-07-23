@@ -73,11 +73,15 @@ import Base from '../../layouts/Base.astro';
   <h2>How we test — and where we’re honest about limits</h2>
   <p>
     Every build runs automated accessibility checks (axe-core) in our continuous
-    integration; a change that fails them does not ship. But automated tools
-    catch only about 40% of real barriers, so automated passing is
-    <strong>not</strong> the same as accessible. Manual testing with real
-    assistive technology, and paid disabled co-designers across a range of access
-    needs, are part of how we judge a feature done.
+    integration; a change that fails them does not ship. But that is one tool,
+    and one tool is not much. When GOV.UK <a
+      href="https://accessibility.blog.gov.uk/2017/02/24/what-we-found-when-we-tested-tools-on-the-worlds-least-accessible-webpage/"
+      >tested ten automated checkers against a page with 143 deliberate
+    barriers</a>, the best single one found 41% of them — and 29% of the barriers
+    were missed by every tool tested. So automated passing is <strong>not</strong>
+    the same as accessible, and we do not present it as such. Manual testing with
+    real assistive technology, and paid disabled co-designers across a range of
+    access needs, are part of how we judge a feature done.
   </p>
 
   <h2>Found a barrier?</h2>

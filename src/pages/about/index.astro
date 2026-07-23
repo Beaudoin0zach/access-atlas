@@ -1,0 +1,162 @@
+---
+// About / mission. This is the page that carries the project's voice — why it
+// exists, who "we" is, and why the scope is deliberately small. Everything here
+// must stay true today (same rule as the accessibility statement): no roadmap
+// claims written in the present tense.
+// On-demand so a visitor's saved accessibility settings apply while they read it.
+export const prerender = false;
+
+import Base from '../../layouts/Base.astro';
+---
+
+<Base
+  title="About"
+  description="Why Access Atlas exists, who builds it, and why it starts in Buffalo and Erie County rather than everywhere."
+>
+  <h1>About Access Atlas</h1>
+
+  <p class="lead">
+    Access Atlas is a directory of accessible places and disabled-led providers in
+    Buffalo and Erie County, built by disabled people. It exists because
+    “accessible” gets recorded as one fact about a building, when it is really a
+    different fact for every person who tries to get in.
+  </p>
+
+  <p>
+    I learned this in New York. My best friend used a wheelchair, and we would go
+    to the same places and get stopped by different things — an elevator out of
+    service at the station, one large step at a door, an “accessible” hotel room
+    too narrow to turn a chair around in. What stopped me was something else
+    again: mold, a flight of stairs, nothing on the menu I could eat. Nearly
+    every one of those places called itself accessible, and nearly every one of
+    them believed it.
+  </p>
+
+  <h2>What goes wrong</h2>
+  <p>
+    They were answering a question that has no single answer. “Is it accessible?”
+    sounds like one question and is actually dozens, and which ones matter depends
+    entirely on who is asking — which is why the same building can be genuinely
+    accessible to one of us and a closed door to the other, on the same afternoon.
+    A rating that collapses all of that into one number is not a simplification.
+    It is an answer to a question nobody asked.
+  </p>
+  <p>
+    The second failure compounds the first: the information is almost always
+    written by the people who own the building rather than the people who have to
+    get into it, so it records intent instead of reality — a ramp that exists but
+    is chained shut, a step-free entrance that runs around the back through the
+    kitchen. Not lies. Just written from the wrong side of the door, by someone
+    who never had to test it.
+  </p>
+
+  <h2>A checklist cannot do this on its own</h2>
+  <p>
+    Every university I have spent real time in has been inaccessible in some way,
+    and universities are the easy case. They have budgets, <a
+      href="https://www.ada.gov/resources/title-ii-primer/">legal obligations</a>,
+    and usually an office whose entire job this is. What they mostly do not have is
+    anyone who needed the building to work being asked before it was built.
+    Standards are worth having, and ours are a floor we hold ourselves to. But a
+    standard is a minimum someone can satisfy without ever learning what the
+    building does to a person. The specifics are where accessibility actually
+    lives: the width of that doorway, the height of that counter, the single step
+    nobody wrote down.
+  </p>
+  <p>
+    Places do not come out accessible by default. They get that way when someone
+    who has the knowledge and the need is in the room while decisions are being
+    made, and most places are not built that way — so the checking has to happen
+    afterwards, in person, by the people it affects. That is what this site is:
+    peer-to-peer verification. Not an authority handing down a rating, but
+    disabled people telling each other what they actually found when they got
+    there.
+  </p>
+
+  <h2>Who “we” is</h2>
+  <p>
+    Access Atlas is disabled-led. The people deciding what counts as an
+    accessibility fact here are people who get stopped by the lack of one. That is
+    not a credential we are claiming for marketing purposes — it is the reason the
+    labels on this site are shaped the way they are. Every trust label exists
+    because someone who needed the information got burned by its absence, and
+    wanted to know how much to trust it before making the trip.
+  </p>
+
+  <h2>Why Buffalo and Erie County</h2>
+  <p>
+    New York taught me the problem; Buffalo is where I can do something about it.
+    A national directory of unverified listings would be easy to build and worth
+    nothing. And New York, of all places, is where a thin and honest one would
+    have helped least — scale is the whole difficulty there. Every accessibility
+    claim here has to be confirmed in person by someone who was actually there,
+    so coverage can only grow at the speed people can walk and roll through it.
+    That argues for starting in one place, close to home, where we can check.
+  </p>
+  <p>
+    This means the directory is thin. We would rather it be thin and true. A
+    listing that is missing costs you a search somewhere else; a listing that is
+    wrong costs you a trip, and sometimes a good deal more than that.
+  </p>
+
+  <h2>What we will not do</h2>
+  <ul>
+    <li>
+      We will never reduce accessibility to one star rating. Each fact stands on
+      its own, because each person needs different ones.
+    </li>
+    <li>
+      We will never require proof of disability. Owners self-attest; visitors
+      contribute pseudonymously. There is no medical gatekeeping here, ever.
+    </li>
+    <li>
+      We will never call self-reported information “verified”. Those are different
+      labels and they stay different, even when the directory looks emptier for it.
+    </li>
+    <li>
+      We will never sell your data or load third-party trackers to watch you read.
+    </li>
+  </ul>
+
+  <h2>How to check us</h2>
+  <p>
+    None of that is meant to be taken on faith. Our
+    <a href="/about/privacy/">trust labels</a> are defined in public and say
+    exactly what each one is worth, and our
+    <a href="/about/accessibility/">accessibility statement</a> describes what
+    this site does today, links the evidence for the one hard number it cites,
+    and admits what our automated testing misses. The code is open.
+  </p>
+
+  <h2>The repeat place</h2>
+  <p>
+    I have been excluded by well-meaning people. The reality is that most
+    exclusion is exactly that — not hostility, just a building or a menu or a
+    plan nobody thought to check, arranged by people who would have been
+    mortified to hear what it cost me. It is easier to describe than the other
+    thing, which is what happens on the rare occasion everything works.
+  </p>
+  <p>
+    Mia Mingus named that one: <a
+      href="https://leavingevidence.wordpress.com/2011/05/05/access-intimacy-the-missing-link/"
+      >access intimacy</a>, “that elusive, hard to describe feeling when someone
+    else ‘gets’ your access needs.” It is what you feel in the place you can go
+    back to — the repeat place, where you stop doing the arithmetic before you
+    walk in, because it has already been done and it came out fine. I have a few.
+    They are treasured, and they were all found the hard way.
+  </p>
+  <p>
+    Everything above — the labels, the confirmations, the refusal to round any
+    claim up — exists so that other disabled people in this county find theirs
+    sooner, and spend less of their lives checking.
+  </p>
+
+  <div class="disclaimer">
+    <p>
+      If you know a place in Buffalo or Erie County that belongs here — or one we
+      have listed wrong — <a href="/contribute/submit/">tell us</a>. A single
+      credible report that somewhere is not accessible freezes the claim while we
+      re-check it. We would rather be corrected than trusted.
+    </p>
+  </div>
+</Base>

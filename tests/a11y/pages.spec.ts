@@ -12,6 +12,7 @@ const ROUTES = [
   '/places/?category=arts_culture&county=Erie+County',
   // filtered empty state (an intentionally over-narrow combination)
   '/providers/?q=zzz-no-such-listing&literate=1',
+  '/about/',
   '/about/privacy/',
   '/about/accessibility/',
   '/about/help/',
@@ -99,10 +100,39 @@ test('seeded place exposes the report-a-visit CTA + per-attribute confirm links'
 // on-device "sort by distance" feature; §13, ADR docs/adr-0001-nearby-geolocation.md).
 // Everything else — including the list DETAIL pages — must ship no <script> at
 // all (low-bandwidth mandate, §5).
-for (const route of ['/', '/settings/', '/about/accessibility/', '/about/help/', '/places/11111111-1111-1111-1111-111111111111/', '/account/', '/account/delete/']) {
+for (const route of ['/', '/settings/', '/about/', '/about/accessibility/', '/about/help/', '/places/11111111-1111-1111-1111-111111111111/', '/account/', '/account/delete/']) {
   test(`ships zero <script>: ${route}`, async ({ page }) => {
     await page.goto(route);
     await expect(page.locator('script')).toHaveCount(0);
+  });
+}
+
+// At most ONE nav item may carry aria-current="page" (§5 — two "you are here"
+// markers is worse than none for a screen-reader user). Nav matching is
+// PREFIX-based, so this breaks the moment someone adds a nav href that is a
+// prefix of another without marking it `exact` in Base.astro. That is precisely
+// what "/about/" is: a prefix of /about/help/ and /about/privacy/.
+//
+// Zero is legitimate and deliberate: a route with no matching nav section
+// (/about/accessibility/ reaches the reader from the footer) lights nothing
+// rather than guessing. So the invariant under test is "never more than one".
+for (const route of ['/about/', '/about/help/', '/about/privacy/', '/about/accessibility/', '/settings/']) {
+  test(`at most one nav item is aria-current: ${route}`, async ({ page }) => {
+    await page.goto(route);
+    const current = page.locator('nav[aria-label="Primary"] a[aria-current="page"]');
+    expect(await current.count()).toBeLessThanOrEqual(1);
+  });
+}
+
+// The /about/ ⊂ /about/help/ collision specifically: both routes must light
+// their OWN item and nothing else. This is the regression that the `exact` flag
+// on the About nav entry exists to prevent.
+for (const [route, label] of [['/about/', 'About'], ['/about/help/', 'Help'], ['/about/privacy/', 'Privacy']] as const) {
+  test(`nav lights exactly "${label}" on ${route}`, async ({ page }) => {
+    await page.goto(route);
+    const current = page.locator('nav[aria-label="Primary"] a[aria-current="page"]');
+    await expect(current).toHaveCount(1);
+    await expect(current).toHaveText(label);
   });
 }
 
