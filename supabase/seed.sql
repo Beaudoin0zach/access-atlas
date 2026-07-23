@@ -46,8 +46,9 @@ insert into listings (id, kind, name, summary, city, region, postal_code, catego
    'Primary care practice.', 'Buffalo', 'Erie County', '14201', 'healthcare', false, true, 42.9010, -78.8760, 'approximate'),
   -- Deliberately CLAIMLESS (zero attribute claims): exercises the "no facts
   -- reported yet — be the first" entry into the report flow (§4). Keep it so.
-  ('44444444-4444-4444-4444-444444444444', 'place', 'Riverside Bakery',
-   'Small bakery on the West Side.', 'Buffalo', 'Erie County', '14213', 'business', true, false, 42.9160, -78.8950, 'approximate');
+  ('44444444-4444-4444-4444-444444444444', 'place', 'Example Test Place — claimless fixture',
+   'Not a real business. A test fixture with no accessibility reports, used to exercise the "be the first to report" flow.',
+   'Buffalo', 'Erie County', '14213', 'business', true, false, 42.9160, -78.8950, 'approximate');
 
 insert into provider_profiles (listing_id, disability_literate) values
   ('33333333-3333-3333-3333-333333333333', true);
