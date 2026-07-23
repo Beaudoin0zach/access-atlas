@@ -39,27 +39,38 @@ const devStorageOrigin = (() => {
 
 // SCOPED SCRIPT CARVE-OUT (the ONLY routes that ship JavaScript).
 //
-// The list index pages carry ONE self-hosted progressive-enhancement script
-// (/nearby.js — the on-device "sort by distance" feature). Everywhere else the
-// browsing surface stays strictly zero-JS: script-src 'none'. This is the
-// deliberate, minimal departure from the §5 zero-JS default, recorded in
-// docs/adr-0001-nearby-geolocation.md and to be raised as a BAS ADR (§15). Keep
-// this set as SMALL as possible — a new script route is a real a11y/perf/privacy
-// decision, not a convenience.
+// Two, and only two, kinds of route carry one self-hosted progressive-enhancement
+// script; everywhere else the surface stays strictly zero-JS (script-src 'none'):
+//   * the list index pages (/places, /providers) -> /nearby.js, the on-device
+//     "sort by distance" feature (docs/adr-0001-nearby-geolocation.md).
+//   * the confirm flow (/contribute/confirm/<claimId>) -> /confirm-camera.js, the
+//     native camera capture that no-ops on web and only acts inside the Capacitor
+//     iOS app (App Review 4.2; docs/adr-0002-native-camera-capture.md).
+// Both are the deliberate, minimal departure from the §5 zero-JS default, to be
+// raised as BAS ADRs (§15). Keep this list as SMALL as possible — a new script
+// route is a real a11y/perf/privacy decision, not a convenience.
 //
 // Note default-src stays 'none', so even on these routes the script can make NO
-// network requests (no connect-src) — it CANNOT exfiltrate the visitor's
-// location even if it tried. Location never leaves the device (§6).
+// network requests (no connect-src) — nearby.js can't exfiltrate the visitor's
+// location, and confirm-camera.js talks to native over the Capacitor bridge, not
+// the network. Nothing leaves the device by network (§6).
 const SCRIPT_ENHANCED_ROUTES = new Set(['/places', '/providers']);
+
+// Dynamic routes (a variable id segment) that ship a self-hosted enhancement —
+// matched by prefix since the exact path isn't enumerable.
+const SCRIPT_ENHANCED_PREFIXES = ['/contribute/confirm/'];
 
 function normalizePath(pathname: string): string {
   const p = (pathname.split('?')[0] || '').replace(/\/+$/, '');
   return p === '' ? '/' : p;
 }
 
-/** True only for the list index routes that ship the /nearby.js enhancement. */
+/** True only for the routes that ship a self-hosted enhancement script. */
 export function routeAllowsScript(pathname: string): boolean {
-  return SCRIPT_ENHANCED_ROUTES.has(normalizePath(pathname));
+  const p = normalizePath(pathname);
+  if (SCRIPT_ENHANCED_ROUTES.has(p)) return true;
+  // Prefix match on the normalized path, e.g. /contribute/confirm/<claimId>.
+  return SCRIPT_ENHANCED_PREFIXES.some((pre) => `${p}/`.startsWith(pre));
 }
 
 // The CSP for a given route. script-src is 'self' ONLY on the enhanced routes,

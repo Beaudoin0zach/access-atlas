@@ -151,3 +151,16 @@ for (const route of ['/places/', '/places/?q=cafe&owned=1', '/providers/']) {
     expect((await scripts.first().textContent())?.trim() || '').toBe('');
   });
 }
+
+// The confirm route ships EXACTLY ONE script: the external, self-hosted
+// /confirm-camera.js (native camera capture; §13, ADR-0002). Same absolute
+// contract as the list pages — one self-hosted script, never inline. The script
+// no-ops on web (Capacitor absent), and the form above is fully server-rendered
+// and usable without it, which the axe scan of this route already exercises.
+test('confirm page ships only the self-hosted camera script', async ({ page }) => {
+  await page.goto('/contribute/confirm/c1111111-1111-1111-1111-111111111111/');
+  const scripts = page.locator('script');
+  await expect(scripts).toHaveCount(1);
+  await expect(scripts.first()).toHaveAttribute('src', '/confirm-camera.js');
+  expect((await scripts.first().textContent())?.trim() || '').toBe('');
+});
