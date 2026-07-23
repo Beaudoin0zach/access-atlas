@@ -184,8 +184,9 @@ export const LISTINGS: Listing[] = [
   {
     id: '44444444-4444-4444-4444-444444444444',
     kind: 'place',
-    name: 'Riverside Bakery',
-    summary: 'Small bakery on the West Side.',
+    name: 'Example Test Place — claimless fixture',
+    summary:
+      'Not a real business. A test fixture with no accessibility reports, used to exercise the "be the first to report" flow.',
     city: 'Buffalo',
     region: 'Erie County',
     postalCode: '14213',
