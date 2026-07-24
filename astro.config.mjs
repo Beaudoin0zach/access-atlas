@@ -12,6 +12,48 @@ import node from '@astrojs/node';
 // server (it gets real env from its host), so this affects local tooling only.
 Object.assign(process.env, loadEnv(process.env.NODE_ENV ?? 'development', process.cwd(), ''));
 
+// Public origin(s) this app is served from, for Astro's CSRF origin check.
+//
+// WHY THIS IS NEEDED. Astro's built-in `security.checkOrigin` (on by default for
+// on-demand routes) rejects a form POST whose browser `Origin` header doesn't
+// match the origin Astro computes for itself. Behind a TLS-terminating proxy —
+// DO App Platform here — the container receives plain HTTP with the real host in
+// `X-Forwarded-Host`/`X-Forwarded-Proto`. But Astro only TRUSTS those forwarded
+// headers for hosts named in `security.allowedDomains`; with none configured it
+// refuses the forwarded host and falls back to `localhost`, so it computes its
+// origin as `https://localhost` while the browser sends `https://<real-host>`.
+// Mismatch → "Cross-site POST form submissions are forbidden" on every POST.
+// (Local `astro dev` is unaffected: the dev server doesn't run this validation.)
+//
+// The fix is to name the real host(s) so the forwarded headers are trusted — NOT
+// to disable checkOrigin, which is the actual CSRF protection and, with a
+// zero-JS surface (no client token scheme possible), the only layer there is.
+//
+// Patterns are HOSTNAME-ONLY on purpose. Adding a `protocol` field would route
+// protocol-validation through a dummy `example.com` origin that never matches a
+// real hostname, silently rejecting the forwarded proto and reintroducing the
+// bug. Hostname-only trusts http/https via Astro's simple scheme check while
+// still pinning the host exactly.
+//
+// Build-time (this file bakes it into the manifest), comma-separated, accepts
+// full origins or bare hosts. Set SITE_ORIGINS at BUILD time on the host, e.g.
+//   SITE_ORIGINS=https://accessatlas.org,access-atlas-xxxx.ondigitalocean.app
+// Unset → empty → today's behavior preserved (correct for local dev, where host
+// IS localhost). A public hostname is not a secret, so baking it does not touch
+// the §6 no-secrets-in-the-image rule.
+function allowedDomainsFromEnv() {
+  const raw = process.env.SITE_ORIGINS ?? '';
+  return raw
+    .split(',')
+    .map((entry) => entry.trim())
+    .filter(Boolean)
+    .map((entry) => {
+      // Accept "https://host[:port]" or a bare "host".
+      const hostname = entry.includes('://') ? new URL(entry).hostname : entry;
+      return { hostname };
+    });
+}
+
 // Astro is chosen (§9) to ship near-zero JS by default: static list/table
 // views render as pure HTML, and React islands hydrate ONLY where a
 // contributor flow needs interactivity. Do not convert whole pages to
@@ -28,6 +70,13 @@ export default defineConfig({
   output: 'static',
   adapter: node({ mode: 'standalone' }),
   integrations: [react()],
+  security: {
+    // Keep the CSRF origin check ON (this is its default; stated to make the
+    // intent unmissable). allowedDomains only tells Astro which forwarded hosts
+    // to believe behind the proxy — see allowedDomainsFromEnv above.
+    checkOrigin: true,
+    allowedDomains: allowedDomainsFromEnv(),
+  },
   // Prefer accessible defaults; keep the build boring and legible.
   build: {
     inlineStylesheets: 'auto',
